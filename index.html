@@ -975,29 +975,31 @@ body::before {
   <div class="polaroid-upload-card">
     <div class="polaroid-upload-title">✨ Añadir una polaroid</div>
 
-    <div class="file-drop-zone" id="fileDropZone">
+    <div class="file-drop-zone" id="fileDropZone" onclick="togglePhotoOptions()">
       <input type="file" id="polaroidFileInput" accept="image/*"
              onchange="onPolaroidFileChange(event)">
       <div class="file-drop-zone-icon" id="dropIcon">🌸</div>
-      <div class="file-drop-zone-label" id="dropLabel">Toca aquí para elegir una foto</div>
+      <div class="file-drop-zone-label" id="dropLabel">Toca aquí para añadir una foto</div>
       <img class="file-drop-zone-preview" id="filePreview" alt="Vista previa">
+      <div id="photoOptions" style="display:none;flex-direction:column;gap:8px;margin-top:10px;width:100%">
+        <button class="btn-secondary" onclick="event.stopPropagation(); document.getElementById('polaroidFileInput').click()">
+          📁 Subir foto
+        </button>
+        <button class="btn-secondary" onclick="event.stopPropagation(); startCamera('user')">
+          📸 Tomar foto
+        </button>
+      </div>
     </div>
 
     <textarea class="polaroid-text-input" id="polaroidCaption"
               rows="2"
               placeholder="Escribe algo bonito aquí…"></textarea>
 
-              <button class="btn-secondary" onclick="startCamera('user')" style="margin-bottom:10px;width:100%">
-                📸 Hacer foto tipo BeReal
-              </button>
-              
-              <video id="cameraPreview" autoplay playsinline style="width:100%;border-radius:12px;display:none;margin-bottom:10px;"></video>
-              
-              <p id="cameraStep" style="text-align:center;font-size:0.8rem;color:var(--text-soft);display:none"></p>
-              
-              <button class="btn-main" onclick="addPolaroid()" style="margin-top:0">
-                📷 &nbsp; Guardar polaroid
-              </button>
+    <video id="cameraPreview" autoplay playsinline style="width:100%;border-radius:12px;display:none;margin-bottom:10px;"></video>
+    <p id="cameraStep" style="text-align:center;font-size:0.8rem;color:var(--text-soft);display:none"></p>
+    <button class="btn-main" onclick="addPolaroid()" style="margin-top:0">
+      📷 &nbsp; Guardar polaroid
+    </button>
   </div>
 
   <!-- Grid de polaroids -->
@@ -1739,10 +1741,19 @@ window.addEventListener('DOMContentLoaded', () => {
   resetCarTimer();
 });
 /* =====================================================
+   POLAROID PHOTO OPTIONS
+   ===================================================== */
+
+function togglePhotoOptions() {
+  const options = document.getElementById('photoOptions');
+  options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
+}
+
+/* =====================================================
    📸 MODO BEREAL
    ===================================================== */
 
-   let beRealStep = 0;
+let beRealStep = 0;
 let backImage = null;
 let frontImage = null;
 let currentStream = null;
