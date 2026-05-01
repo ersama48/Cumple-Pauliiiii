@@ -979,7 +979,7 @@ body::before {
       <input type="file" id="polaroidFileInput" accept="image/*"
              onchange="onPolaroidFileChange(event)">
       <div class="file-drop-zone-icon" id="dropIcon">🌸</div>
-      <div class="file-drop-zone-label" id="dropLabel">Elige una foto o haz una ahora</div>
+      <div class="file-drop-zone-label" id="dropLabel">Toca aquí para elegir una foto</div>
       <img class="file-drop-zone-preview" id="filePreview" alt="Vista previa">
     </div>
 
@@ -987,8 +987,8 @@ body::before {
               rows="2"
               placeholder="Escribe algo bonito aquí…"></textarea>
 
-              <button class="btn-secondary" onclick="startCamera('environment')" style="margin-bottom:10px;width:100%">
-                📸 Hacer foto ahora
+              <button class="btn-secondary" onclick="startCamera('user')" style="margin-bottom:10px;width:100%">
+                📸 Hacer foto tipo BeReal
               </button>
               
               <video id="cameraPreview" autoplay playsinline style="width:100%;border-radius:12px;display:none;margin-bottom:10px;"></video>
@@ -1041,7 +1041,7 @@ body::before {
 
     <!-- Botón al álbum de polaroids desde la pantalla final -->
     <button class="btn-gold" onclick="showScreen('screen-polaroid'); initPolaroid(); polaroidFromFinal = true;" style="margin-top:20px">
-      📸 &nbsp; Ver álbum de recuerdos &nbsp; ✨
+      📸 &nbsp; Ver nuestro álbum de recuerdos &nbsp; ✨
     </button>
 
     <div style="margin-top:28px;font-size:2rem;animation:pulseBeat 1s infinite">
@@ -1597,9 +1597,9 @@ function onPolaroidFileChange(event) {
 
 function addPolaroid() {
   if (!pendingImageBase64) {
-  alert('Puedes elegir una foto o hacer una en el momento 📷');
-  return;
-}
+    alert('Primero elige una foto 📷');
+    return;
+  }
   const caption = document.getElementById('polaroidCaption').value.trim();
   const pol = {
     id:    Date.now(),
@@ -1741,8 +1741,17 @@ window.addEventListener('DOMContentLoaded', () => {
 /* =====================================================
    📸 MODO BEREAL
    ===================================================== */
+
+   let beRealStep = 0;
+let backImage = null;
+let frontImage = null;
 let currentStream = null;
 
+function startBeReal() {
+  beRealStep = 1;
+  document.getElementById('cameraStep').style.display = 'block';
+  startCamera('environment'); // trasera
+}
 
 function startCamera(facingMode) {
   const video = document.getElementById('cameraPreview');
@@ -1753,20 +1762,92 @@ function startCamera(facingMode) {
   }
 
   navigator.mediaDevices.getUserMedia({
-    video: { facingMode: facingMode }
+    video: { facingMode: { ideal: facingMode } }
   }).then(stream => {
     currentStream = stream;
     video.srcObject = stream;
     video.style.display = 'block';
 
-    stepText.textContent = "📷 Toca para hacer la foto";
-    video.onclick = captureSimplePhoto;
+    if (beRealStep === 1) {
+      stepText.textContent = "📷 Foto trasera (toca pantalla)";
+    } else {
+      stepText.textContent = "🤳 Foto delantera (toca pantalla)";
+    }
 
-  }).catch(() => {
-    alert("No se pudo acceder a la cámara 😢");
+    video.onclick = captureBeReal;
+
+  }).catch((err) => {
+    console.error(err);
+    alert("No se pudo acceder a la cámara. Asegúrate de dar permisos 😢");
   });
 }
 
+function captureBeReal() {
+  const video = document.getElementById('cameraPreview');
+
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0);
+
+  const imgData = canvas.toDataURL('image/jpeg');
+
+  if (beRealStep === 1) {
+    backImage = imgData;
+    beRealStep = 2;
+    startCamera('user'); // frontal
+  } else {
+    frontImage = imgData;
+    finishBeReal();
+  }
+}
+
+function finishBeReal() {
+  const finalCanvas = document.createElement('canvas');
+  const size = 600;
+  finalCanvas.width = size;
+  finalCanvas.height = size;
+
+  const ctx = finalCanvas.getContext('2d');
+
+  const imgBack = new Image();
+  const imgFront = new Image();
+
+  imgBack.src = backImage;
+  imgFront.src = frontImage;
+
+  imgBack.onload = () => {
+    ctx.drawImage(imgBack, 0, 0, size, size);
+
+    imgFront.onload = () => {
+      const smallSize = size * 0.35;
+      const margin = 15;
+
+      ctx.drawImage(
+        imgFront,
+        size - smallSize - margin,
+        size - smallSize - margin,
+        smallSize,
+        smallSize
+      );
+
+      pendingImageBase64 = finalCanvas.toDataURL('image/jpeg');
+
+      // preview
+      const preview = document.getElementById('filePreview');
+      preview.src = pendingImageBase64;
+      preview.style.display = 'block';
+
+      document.getElementById('dropIcon').style.display = 'none';
+      document.getElementById('dropLabel').style.display = 'none';
+
+      // limpiar
+      stopCamera();
+    };
+  };
+}
 
 function stopCamera() {
   if (currentStream) {
