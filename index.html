@@ -43,10 +43,23 @@ body::before {
   pointer-events: none; z-index: 0;
   animation: bgPulse 8s ease-in-out infinite alternate;
 }
-@keyframes bgPulse { from { opacity: 0.7; } to { opacity: 1; } }
 
-#heartsContainer { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
-.heart-float { position: absolute; bottom: -60px; opacity: 0; user-select: none; animation: floatUp linear infinite; }
+@keyframes bgPulse {
+  from { opacity: 0.7; }
+  to   { opacity: 1; }
+}
+
+#heartsContainer {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 1; overflow: hidden;
+}
+
+.heart-float {
+  position: absolute; bottom: -60px;
+  opacity: 0; user-select: none;
+  animation: floatUp linear infinite;
+}
+
 @keyframes floatUp {
   0%   { transform: translateY(0) rotate(0deg) scale(1);   opacity: 0; }
   8%   { opacity: 0.7; }
@@ -65,6 +78,7 @@ body::before {
   display: none;
 }
 #musicBtn.show { display: block; }
+
 @keyframes pulseBeat {
   0%,100% { transform: scale(1); box-shadow: 0 4px 24px rgba(192,54,106,0.55); }
   50%      { transform: scale(1.06); box-shadow: 0 6px 32px rgba(192,54,106,0.8); }
@@ -76,20 +90,39 @@ body::before {
   flex-direction: column;
 }
 #videoModal.show { display: flex; }
-#videoModal video { max-width: 100%; max-height: 82vh; width: 100%; object-fit: contain; }
-#videoTimerWrap { color: rgba(255,255,255,0.55); font-size: 0.78rem; margin-top: 12px; letter-spacing: 1px; }
+#videoModal video {
+  max-width: 100%; max-height: 82vh; width: 100%;
+  object-fit: contain;
+}
+#videoTimerWrap {
+  color: rgba(255,255,255,0.55); font-size: 0.78rem;
+  margin-top: 12px; letter-spacing: 1px;
+}
 
 .screen {
   display: none; position: relative; z-index: 2;
   min-height: 100vh; padding: 20px 16px 50px;
   flex-direction: column; align-items: center;
 }
-.screen.active { display: flex; animation: fadeUp 0.55s cubic-bezier(.22,1,.36,1); }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+.screen.active {
+  display: flex;
+  animation: fadeUp 0.55s cubic-bezier(.22,1,.36,1);
+}
 
-.display-title { font-family: 'Playfair Display', serif; font-style: italic; line-height: 1.2; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-.greeting-top { text-align: center; padding: 28px 0 18px; width: 100%; }
+.display-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; line-height: 1.2;
+}
+
+.greeting-top {
+  text-align: center; padding: 28px 0 18px; width: 100%;
+}
+
 .greeting-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2.2rem, 9vw, 3.8rem);
@@ -97,14 +130,20 @@ body::before {
   background: linear-gradient(135deg, var(--gold-light), var(--gold), #c89030);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: none;
   animation: shimmerGold 4s ease-in-out infinite;
   margin-bottom: 6px;
 }
+
 @keyframes shimmerGold {
   0%,100% { filter: brightness(1); }
   50%      { filter: brightness(1.3) drop-shadow(0 0 20px rgba(212,168,83,0.6)); }
 }
-.greeting-sub { font-size: 0.78rem; color: var(--rose-light); letter-spacing: 4px; text-transform: uppercase; font-style: italic; }
+
+.greeting-sub {
+  font-size: 0.78rem; color: var(--rose-light);
+  letter-spacing: 4px; text-transform: uppercase; font-style: italic;
+}
 
 .carousel {
   width: 100%; max-width: 400px;
@@ -112,30 +151,54 @@ body::before {
   border-radius: 22px; overflow: hidden;
   box-shadow: 0 8px 48px rgba(192,54,106,0.35), 0 0 0 1px var(--border);
 }
-.carousel-track { display: flex; transition: transform 0.5s cubic-bezier(.4,0,.2,1); }
+
+.carousel-track {
+  display: flex; transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+}
+
 .carousel-slide {
   min-width: 100%; aspect-ratio: 4/5;
   background: linear-gradient(135deg, #160710, #2a0d1c);
   position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
-.carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.carousel-slide img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
 .photo-fallback {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 10px;
   font-size: 4.5rem; color: rgba(255,255,255,0.15);
   width: 100%; height: 100%;
 }
-.photo-fallback span { font-size: 0.8rem; color: var(--text-soft); font-family: 'Lora', serif; font-style: italic; }
+.photo-fallback span {
+  font-size: 0.8rem; color: var(--text-soft);
+  font-family: 'Lora', serif; font-style: italic;
+}
+
 .carousel-slide::after {
   content: '';
   position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
   background: linear-gradient(transparent, rgba(10,4,8,0.6));
   pointer-events: none;
 }
-.carousel-nav { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; z-index: 5; }
-.carousel-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.35); cursor: pointer; transition: all 0.3s; }
-.carousel-dot.active { background: var(--gold); width: 22px; border-radius: 4px; }
+
+.carousel-nav {
+  position: absolute; bottom: 14px; left: 50%;
+  transform: translateX(-50%); display: flex; gap: 7px; z-index: 5;
+}
+
+.carousel-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,0.35); cursor: pointer;
+  transition: all 0.3s;
+}
+.carousel-dot.active {
+  background: var(--gold); width: 22px; border-radius: 4px;
+}
+
 .carousel-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: rgba(0,0,0,0.45); backdrop-filter: blur(4px);
@@ -157,6 +220,7 @@ body::before {
   position: relative; overflow: hidden;
   backdrop-filter: blur(8px);
 }
+
 .love-letter::before {
   content: '\201C';
   position: absolute; top: -18px; left: 12px;
@@ -164,13 +228,31 @@ body::before {
   font-size: 9rem; color: rgba(212,168,83,0.08);
   line-height: 1; pointer-events: none;
 }
-.letter-head { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--gold); margin-bottom: 16px; font-style: italic; }
-.letter-body { font-size: 0.93rem; line-height: 1.85; color: var(--text-soft); font-style: italic; }
+
+.letter-head {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem; color: var(--gold);
+  margin-bottom: 16px; font-style: italic;
+}
+
+.letter-body {
+  font-size: 0.93rem; line-height: 1.85;
+  color: var(--text-soft); font-style: italic;
+}
 .letter-body p { margin-bottom: 12px; }
 .letter-body p:last-child { margin-bottom: 0; }
-.letter-sign { text-align: right; margin-top: 20px; font-family: 'Playfair Display', serif; font-style: italic; color: var(--rose-light); font-size: 1.1rem; }
 
-.divider { width: 64px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 22px auto; }
+.letter-sign {
+  text-align: right; margin-top: 20px;
+  font-family: 'Playfair Display', serif;
+  font-style: italic; color: var(--rose-light); font-size: 1.1rem;
+}
+
+.divider {
+  width: 64px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 22px auto;
+}
 
 .btn-main {
   display: block; width: 100%; max-width: 400px;
@@ -205,15 +287,38 @@ body::before {
 }
 .btn-gold:active { transform: scale(0.97); }
 
-.game-header { text-align: center; padding: 24px 0 14px; width: 100%; }
-.game-tag { font-size: 0.72rem; color: var(--rose-light); letter-spacing: 3.5px; text-transform: uppercase; margin-bottom: 8px; }
-.game-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 6.5vw, 2.4rem); color: var(--gold); font-style: italic; }
-.game-sub { font-size: 0.88rem; color: var(--text-soft); margin-top: 6px; font-style: italic; }
+.game-header {
+  text-align: center; padding: 24px 0 14px; width: 100%;
+}
+.game-tag {
+  font-size: 0.72rem; color: var(--rose-light);
+  letter-spacing: 3.5px; text-transform: uppercase; margin-bottom: 8px;
+}
+.game-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 6.5vw, 2.4rem);
+  color: var(--gold); font-style: italic;
+}
+.game-sub {
+  font-size: 0.88rem; color: var(--text-soft);
+  margin-top: 6px; font-style: italic;
+}
 
 .prog-wrap { width: 100%; max-width: 400px; margin: 10px 0 6px; }
-.prog-bar { height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
-.prog-fill { height: 100%; background: linear-gradient(90deg, var(--rose), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
-.q-counter { font-size: 0.78rem; color: var(--text-soft); text-align: center; margin-bottom: 10px; }
+.prog-bar {
+  height: 5px; background: rgba(255,255,255,0.08);
+  border-radius: 3px; overflow: hidden;
+}
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  border-radius: 3px; transition: width 0.5s ease;
+}
+
+.q-counter {
+  font-size: 0.78rem; color: var(--text-soft);
+  text-align: center; margin-bottom: 10px;
+}
 
 .game-card {
   width: 100%; max-width: 400px;
@@ -232,9 +337,12 @@ body::before {
   font-size: 4rem; margin-bottom: 16px;
   border: 1px solid var(--border-rose);
 }
-.g-img-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+.g-img-box img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 14px;
+}
 
 .options-grid { display: grid; gap: 10px; margin-top: 14px; }
+
 .opt-btn {
   padding: 14px 18px;
   background: rgba(255,255,255,0.04);
@@ -245,10 +353,17 @@ body::before {
   display: flex; align-items: center; gap: 10px;
 }
 .opt-btn::before { content: '○'; color: var(--rose-light); font-size: 0.8rem; }
-.opt-btn:active { background: rgba(192,54,106,0.25); border-color: var(--rose); transform: scale(0.98); }
+.opt-btn:active {
+  background: rgba(192,54,106,0.25);
+  border-color: var(--rose); transform: scale(0.98);
+}
 .opt-btn:disabled { pointer-events: none; opacity: 0.5; }
 
-.score-box { text-align: center; padding: 10px; font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--gold); }
+.score-box {
+  text-align: center; padding: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; color: var(--gold);
+}
 
 .word-input {
   width: 100%; padding: 16px 20px;
@@ -261,9 +376,15 @@ body::before {
   margin-bottom: 14px; transition: border-color 0.2s;
 }
 .word-input:focus { border-color: var(--gold); }
-.word-input::placeholder { color: var(--text-soft); letter-spacing: 2px; font-size: 0.85rem; }
+.word-input::placeholder {
+  color: var(--text-soft); letter-spacing: 2px; font-size: 0.85rem;
+}
 
-.puzzle-wrapper { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
+.puzzle-wrapper {
+  width: 100%; max-width: 400px;
+  display: flex; flex-direction: column; align-items: center;
+}
+
 .puzzle-board {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 4px;
@@ -272,6 +393,7 @@ body::before {
   border-radius: 14px; padding: 4px;
   width: min(300px, 90vw);
 }
+
 .puzzle-slot {
   aspect-ratio: 1;
   background: rgba(0,0,0,0.55);
@@ -281,9 +403,13 @@ body::before {
   transition: border-color 0.2s, background 0.2s;
   overflow: hidden;
 }
-.puzzle-slot.drag-over { border-color: var(--gold); background: rgba(212,168,83,0.12); }
+.puzzle-slot.drag-over {
+  border-color: var(--gold);
+  background: rgba(212,168,83,0.12);
+}
 .puzzle-slot.correct { border: 2px solid var(--rose); }
 .puzzle-slot.wrong   { border: 2px solid rgba(255,100,100,0.35); border-style: solid; }
+
 .puzzle-pool {
   display: flex; flex-wrap: wrap; gap: 8px;
   justify-content: center;
@@ -293,6 +419,7 @@ body::before {
   border: 1px dashed rgba(255,255,255,0.1);
   width: 100%;
 }
+
 .p-piece {
   width: 80px; height: 80px;
   background-size: 300% 300%;
@@ -304,41 +431,64 @@ body::before {
 }
 .p-piece:active { cursor: grabbing; }
 .p-piece.dragging { opacity: 0.4; }
+
 .p-piece.placed {
   width: 100%; height: 100%;
   position: absolute; inset: 0;
   border-radius: 7px; border: none;
   cursor: default; background-size: 300% 300%;
 }
-.puzzle-status { text-align: center; margin-top: 10px; color: var(--gold); font-size: 0.88rem; }
 
-.final-wrap { text-align: center; padding-bottom: 50px; width: 100%; max-width: 440px; }
+.puzzle-status {
+  text-align: center; margin-top: 10px;
+  color: var(--gold); font-size: 0.88rem;
+}
+
+.final-wrap {
+  text-align: center; padding-bottom: 50px;
+  width: 100%; max-width: 440px;
+}
+
 .final-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 8vw, 3rem);
   color: var(--gold); font-style: italic;
   animation: shimmerGold 3s infinite;
 }
+
 .final-video-box {
   width: 100%; border-radius: 20px; overflow: hidden;
   border: 1px solid var(--border); margin: 20px 0;
   box-shadow: 0 8px 40px rgba(192,54,106,0.3);
 }
-.final-video-box video, .final-video-box img { width: 100%; display: block; }
+.final-video-box video,
+.final-video-box img { width: 100%; display: block; }
+
 .invite-box {
-  background: linear-gradient(135deg, rgba(192,54,106,0.18), rgba(212,168,83,0.1));
+  background: linear-gradient(135deg,
+    rgba(192,54,106,0.18), rgba(212,168,83,0.1));
   border: 1px solid var(--border);
   border-radius: 20px; padding: 24px 20px;
   margin-top: 20px; text-align: center;
 }
-.invite-title { font-family: 'Playfair Display', serif; color: var(--gold); font-style: italic; font-size: 1.3rem; margin-bottom: 14px; }
-.invite-detail { color: var(--text-soft); line-height: 1.9; font-style: italic; }
+.invite-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold); font-style: italic;
+  font-size: 1.3rem; margin-bottom: 14px;
+}
+.invite-detail {
+  color: var(--text-soft); line-height: 1.9;
+  font-style: italic;
+}
 .invite-detail strong { color: var(--cream); font-style: normal; }
 
 /* ===================================================
    POLAROID SCREEN
    =================================================== */
-.polaroid-header { text-align: center; padding: 28px 0 10px; width: 100%; }
+.polaroid-header {
+  text-align: center; padding: 28px 0 10px; width: 100%;
+}
+
 .polaroid-header-title {
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.8rem, 7vw, 2.8rem);
@@ -349,7 +499,11 @@ body::before {
   animation: shimmerGold 4s ease-in-out infinite;
   margin-bottom: 6px;
 }
-.polaroid-header-sub { font-size: 0.78rem; color: var(--rose-light); letter-spacing: 3px; text-transform: uppercase; font-style: italic; }
+
+.polaroid-header-sub {
+  font-size: 0.78rem; color: var(--rose-light);
+  letter-spacing: 3px; text-transform: uppercase; font-style: italic;
+}
 
 .polaroid-upload-card {
   width: 100%; max-width: 400px;
@@ -359,171 +513,76 @@ body::before {
   margin: 14px 0;
   backdrop-filter: blur(8px);
 }
-.polaroid-upload-title { font-family: 'Playfair Display', serif; color: var(--gold); font-style: italic; font-size: 1.1rem; margin-bottom: 16px; text-align: center; }
 
-/* Selector de fuente de imagen */
-.img-source-selector {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 10px; margin-bottom: 14px;
-}
-.img-source-btn {
-  padding: 18px 10px;
-  background: rgba(255,255,255,0.04);
-  border: 2px dashed var(--border);
-  border-radius: 14px; color: var(--text);
-  font-family: 'Lora', serif; font-size: 0.82rem;
-  cursor: pointer; text-align: center; transition: all 0.2s;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  position: relative;
-}
-.img-source-btn:active, .img-source-btn.selected {
-  border-color: var(--gold);
-  background: rgba(212,168,83,0.1);
-}
-.img-source-btn .src-icon { font-size: 1.8rem; }
-.img-source-btn input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-
-/* Vista previa de imagen seleccionada */
-.preview-container {
-  width: 100%; position: relative;
-  border-radius: 14px; overflow: hidden;
-  margin-bottom: 14px; display: none;
-  border: 1px solid var(--border);
-}
-.preview-container img {
-  width: 100%; display: block;
-  max-height: 260px; object-fit: cover;
-}
-.preview-container .preview-remove {
-  position: absolute; top: 8px; right: 8px;
-  width: 28px; height: 28px; border-radius: 50%;
-  background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.2);
-  color: #fff; font-size: 0.75rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* Visor de cámara */
-.camera-overlay {
-  display: none; position: fixed; inset: 0; z-index: 9000;
-  background: #000; flex-direction: column;
-  align-items: center; justify-content: center;
-}
-.camera-overlay.show { display: flex; }
-.camera-overlay video {
-  width: 100%; max-width: 480px; max-height: 70vh;
-  object-fit: cover; border-radius: 16px;
-  transform: scaleX(-1); /* espejo para frontal */
-}
-.camera-ui {
-  display: flex; flex-direction: column;
-  align-items: center; gap: 16px;
-  padding: 20px 16px; width: 100%; max-width: 480px;
-}
-.camera-hint {
-  color: rgba(255,255,255,0.65);
-  font-size: 0.88rem; font-family: 'Lora', serif;
-  font-style: italic; text-align: center;
-}
-.camera-shutter {
-  width: 70px; height: 70px; border-radius: 50%;
-  background: #fff; border: 4px solid rgba(255,255,255,0.3);
-  cursor: pointer; transition: all 0.15s;
-  box-shadow: 0 0 0 6px rgba(255,255,255,0.15);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-}
-.camera-shutter:active { transform: scale(0.92); background: #eee; }
-.camera-cancel-btn {
-  background: transparent; border: 1px solid rgba(255,255,255,0.25);
-  color: rgba(255,255,255,0.7); padding: 10px 24px;
-  border-radius: 10px; font-family: 'Lora', serif;
-  font-size: 0.85rem; cursor: pointer;
-}
-
-/* Editor de polaroid */
-.editor-overlay {
-  display: none; position: fixed; inset: 0; z-index: 9100;
-  background: rgba(0,0,0,0.93);
-  flex-direction: column; align-items: center;
-  padding: 20px 16px 30px; overflow-y: auto;
-}
-.editor-overlay.show { display: flex; }
-.editor-title {
+.polaroid-upload-title {
   font-family: 'Playfair Display', serif;
   color: var(--gold); font-style: italic;
-  font-size: 1.2rem; margin-bottom: 16px; text-align: center;
+  font-size: 1.1rem; margin-bottom: 16px;
+  text-align: center;
 }
 
-/* Canvas de edición */
-.editor-canvas-wrap {
-  width: 100%; max-width: 340px;
-  position: relative; margin-bottom: 16px;
+.file-drop-zone {
+  width: 100%; min-height: 110px;
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+  cursor: pointer; transition: all 0.3s;
+  background: rgba(255,255,255,0.02);
+  margin-bottom: 14px; padding: 18px;
+  position: relative;
 }
-#editorCanvas {
-  width: 100%; border-radius: 4px;
-  display: block; touch-action: none;
-  box-shadow: 0 6px 32px rgba(0,0,0,0.6);
+.file-drop-zone:hover, .file-drop-zone.active-drop {
+  border-color: var(--gold);
+  background: rgba(212,168,83,0.07);
+}
+.file-drop-zone input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer;
+}
+.file-drop-zone-icon { font-size: 2.2rem; }
+.file-drop-zone-label {
+  font-size: 0.85rem; color: var(--text-soft);
+  font-style: italic; text-align: center;
+}
+.file-drop-zone-preview {
+  width: 100%; max-height: 160px;
+  object-fit: cover; border-radius: 8px;
+  display: none;
 }
 
-/* Herramientas de edición */
-.editor-tools {
-  width: 100%; max-width: 340px;
-  display: flex; flex-direction: column; gap: 12px;
-}
-.editor-section-label {
-  font-size: 0.72rem; color: var(--text-soft);
-  letter-spacing: 2px; text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.emoji-picker-row {
-  display: flex; flex-wrap: wrap; gap: 8px;
-}
-.emoji-pick-btn {
-  width: 42px; height: 42px; border-radius: 10px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  font-size: 1.3rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.15s;
-}
-.emoji-pick-btn:active { background: rgba(212,168,83,0.2); border-color: var(--gold); transform: scale(0.92); }
-
-.caption-input-editor {
+.polaroid-text-input {
   width: 100%; padding: 13px 16px;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.05);
   border: 1px solid var(--border);
   border-radius: 13px; color: var(--text);
   font-family: 'Lora', serif;
   font-size: 0.95rem; font-style: italic;
-  outline: none; transition: border-color 0.2s;
+  outline: none; margin-bottom: 14px;
+  transition: border-color 0.2s; resize: none;
 }
-.caption-input-editor:focus { border-color: var(--gold); }
-.caption-input-editor::placeholder { color: var(--text-soft); }
+.polaroid-text-input:focus { border-color: var(--gold); }
+.polaroid-text-input::placeholder { color: var(--text-soft); font-style: italic; }
 
-.color-row {
-  display: flex; gap: 8px; flex-wrap: wrap;
+/* Color picker for text */
+.color-picker-wrap {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  align-items: center; margin-bottom: 14px;
+}
+.color-picker-label {
+  font-size: 0.8rem; color: var(--text-soft);
+  font-style: italic; width: 100%; margin-bottom: 4px;
 }
 .color-swatch {
-  width: 30px; height: 30px; border-radius: 50%;
+  width: 26px; height: 26px; border-radius: 50%;
   cursor: pointer; border: 2px solid transparent;
   transition: transform 0.15s, border-color 0.15s;
+  flex-shrink: 0;
 }
-.color-swatch:active, .color-swatch.selected { border-color: #fff; transform: scale(1.15); }
-
-.editor-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
-.btn-editor-cancel {
-  padding: 14px; background: transparent;
-  border: 1px solid rgba(255,255,255,0.15);
-  color: var(--text-soft); border-radius: 13px;
-  font-family: 'Lora', serif; font-size: 0.9rem; cursor: pointer;
-}
-.btn-editor-save {
-  padding: 14px;
-  background: linear-gradient(135deg, var(--rose), var(--rose-deep));
-  border: none; color: #fff; border-radius: 13px;
-  font-family: 'Playfair Display', serif;
-  font-size: 0.95rem; font-style: italic; cursor: pointer;
-  box-shadow: 0 3px 16px rgba(192,54,106,0.4);
+.color-swatch:hover { transform: scale(1.2); }
+.color-swatch.selected {
+  border-color: #fff;
+  transform: scale(1.25);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
 }
 
 /* Grid de polaroids */
@@ -532,6 +591,7 @@ body::before {
   display: flex; flex-wrap: wrap; gap: 16px;
   justify-content: center; margin-top: 10px;
 }
+
 .polaroid-card {
   background: #fff;
   border-radius: 2px;
@@ -545,33 +605,63 @@ body::before {
   transition: transform 0.25s, box-shadow 0.25s;
   cursor: default;
 }
-.polaroid-card:hover { box-shadow: 0 14px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.25); z-index: 10; }
+.polaroid-card:hover {
+  box-shadow: 0 14px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 10;
+}
+
 @keyframes polaroidIn {
   from { opacity: 0; transform: scale(0.75) rotate(var(--pol-rot, 0deg)); }
   to   { opacity: 1; transform: scale(1) rotate(var(--pol-rot, 0deg)); }
 }
-.polaroid-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; border-radius: 1px; background: #e0d0d8; }
+
+.polaroid-card img {
+  width: 100%; aspect-ratio: 1 / 1;
+  object-fit: cover; display: block;
+  border-radius: 1px;
+  background: #e0d0d8;
+  transition: filter 0.35s ease;
+}
+.polaroid-card img.bw { filter: grayscale(100%); }
+
 .polaroid-caption {
   font-family: 'Lora', serif;
   font-size: 0.78rem; font-style: italic;
-  color: #5a3a4a; text-align: center;
+  text-align: center;
   margin-top: 0;
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 5px 8px 8px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   max-width: 100%;
+  transition: color 0.3s;
 }
-.polaroid-delete {
+
+/* Botones de acción en polaroid */
+.polaroid-actions {
   position: absolute; top: -10px; right: -10px;
-  width: 26px; height: 26px; border-radius: 50%;
-  background: var(--rose); border: none;
-  color: #fff; font-size: 0.75rem; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(192,54,106,0.6);
-  opacity: 0; transition: opacity 0.2s; z-index: 5;
+  display: flex; gap: 4px;
+  opacity: 0; transition: opacity 0.2s;
 }
-.polaroid-card:hover .polaroid-delete { opacity: 1; }
-.polaroid-empty { width: 100%; max-width: 400px; text-align: center; padding: 32px 20px; color: var(--text-soft); font-style: italic; font-size: 0.9rem; }
+.polaroid-card:hover .polaroid-actions { opacity: 1; }
+
+.polaroid-action-btn {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: none; color: #fff; font-size: 0.72rem;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: transform 0.15s;
+}
+.polaroid-action-btn:hover { transform: scale(1.15); }
+.polaroid-action-btn.btn-delete { background: var(--rose); }
+.polaroid-action-btn.btn-bw { background: #333; }
+.polaroid-action-btn.btn-bw.active { background: #777; box-shadow: 0 0 0 2px #fff; }
+
+.polaroid-empty {
+  width: 100%; max-width: 400px;
+  text-align: center; padding: 32px 20px;
+  color: var(--text-soft); font-style: italic;
+  font-size: 0.9rem;
+}
 .polaroid-empty-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
 
 .btn-back {
@@ -585,10 +675,23 @@ body::before {
 }
 .btn-back:active { background: rgba(255,255,255,0.06); }
 
-#confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 8000; }
+#confettiCanvas {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 8000;
+}
+
 .hidden { display: none !important; }
-.info-text { font-size: 0.82rem; color: var(--text-soft); text-align: center; font-style: italic; margin: 6px 0; }
-.attempts-line { text-align: center; color: var(--text-soft); font-size: 0.84rem; margin-bottom: 10px; }
+
+.info-text {
+  font-size: 0.82rem; color: var(--text-soft);
+  text-align: center; font-style: italic;
+  margin: 6px 0;
+}
+
+.attempts-line {
+  text-align: center; color: var(--text-soft);
+  font-size: 0.84rem; margin-bottom: 10px;
+}
 .attempts-line span { color: var(--rose-light); font-weight: 600; }
 </style>
 </head>
@@ -602,52 +705,12 @@ body::before {
 
 <button id="musicBtn" onclick="activateMusic()">🎵 Activar música</button>
 
-<!-- VIDEO MODAL -->
 <div id="videoModal">
   <video id="modalVideo" playsinline webkit-playsinline></video>
   <div id="videoTimerWrap">Continúa en <span id="timerCount">5</span>s…</div>
 </div>
 
-<!-- CÁMARA OVERLAY -->
-<div class="camera-overlay" id="cameraOverlay">
-  <video id="cameraVideo" autoplay playsinline muted></video>
-  <div class="camera-ui">
-    <div class="camera-hint" id="cameraHint">Toca el botón para hacer la foto 📸</div>
-    <button class="camera-shutter" id="cameraShutter" onclick="capturePhoto()">📷</button>
-    <button class="camera-cancel-btn" onclick="closeCamera()">Cancelar</button>
-  </div>
-</div>
-
-<!-- EDITOR OVERLAY -->
-<div class="editor-overlay" id="editorOverlay">
-  <div class="editor-title">✨ Personaliza tu polaroid</div>
-
-  <div class="editor-canvas-wrap">
-    <canvas id="editorCanvas" width="400" height="480"></canvas>
-  </div>
-
-  <div class="editor-tools">
-    <div class="editor-section-label">Añadir emoji</div>
-    <div class="emoji-picker-row" id="emojiPicker">
-      <!-- filled by JS -->
-    </div>
-
-    <div class="editor-section-label">Pie de foto</div>
-    <input type="text" class="caption-input-editor" id="editorCaption"
-           placeholder="Escribe algo bonito… ❤️"
-           oninput="renderEditorCanvas()">
-
-    <div class="editor-section-label">Color del texto</div>
-    <div class="color-row" id="colorRow"></div>
-
-    <div class="editor-actions">
-      <button class="btn-editor-cancel" onclick="closeEditor()">✕ Cancelar</button>
-      <button class="btn-editor-save"   onclick="saveFromEditor()">💾 Guardar</button>
-    </div>
-  </div>
-</div>
-
-<!-- PANTALLA 0 -->
+<!-- PANTALLA 0 · FELICITACIÓN INICIAL -->
 <div id="screen-greeting" class="screen active">
   <div class="greeting-top">
     <h1 class="greeting-title">Feliz Cumpleaños mi amor ❤️</h1>
@@ -705,14 +768,16 @@ body::before {
   <button class="btn-gold" onclick="showScreen('screen-polaroid'); initPolaroid();">📸 &nbsp; Álbum de recuerdos &nbsp; ✨</button>
 </div>
 
-<!-- JUEGO 1 -->
+<!-- JUEGO 1 · ADIVINA EL RECUERDO -->
 <div id="screen-game1" class="screen">
   <div class="game-header">
     <div class="game-tag">🧩 Juego 1 de 4</div>
     <h2 class="game-title">Adivina el recuerdo</h2>
     <p class="game-sub">¿Cuánto recuerdas de nuestra historia?</p>
   </div>
-  <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div></div>
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" style="width:25%"></div></div>
+  </div>
   <div class="q-counter" id="g1Counter">Pregunta 1 de 3</div>
   <div class="game-card">
     <div class="g-img-box" id="g1ImgBox">
@@ -724,14 +789,16 @@ body::before {
   </div>
 </div>
 
-<!-- JUEGO 2 -->
+<!-- JUEGO 2 · TEST DE PAREJA -->
 <div id="screen-game2" class="screen">
   <div class="game-header">
     <div class="game-tag">💑 Juego 2 de 4</div>
     <h2 class="game-title">Test de pareja</h2>
     <p class="game-sub">¿Qué tanto me conoces?</p>
   </div>
-  <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div></div>
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" style="width:50%"></div></div>
+  </div>
   <div class="score-box">⭐ Puntos: <span id="g2Score">0</span></div>
   <div class="q-counter" id="g2Counter">Pregunta 1 de 5</div>
   <div class="game-card">
@@ -740,14 +807,16 @@ body::before {
   </div>
 </div>
 
-<!-- JUEGO 3 -->
+<!-- JUEGO 3 · DESBLOQUEAR PALABRA -->
 <div id="screen-game3" class="screen">
   <div class="game-header">
     <div class="game-tag">🔐 Juego 3 de 4</div>
     <h2 class="game-title">Desbloquear palabra</h2>
     <p class="game-sub">Hay una palabra que lo dice todo…</p>
   </div>
-  <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div></div>
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" style="width:75%"></div></div>
+  </div>
   <div class="game-card">
     <div style="text-align:center;margin-bottom:20px">
       <div style="font-size:3rem;margin-bottom:12px">🔒</div>
@@ -756,20 +825,24 @@ body::before {
         <small style="color:var(--rose-light)">(pista: tiene 4 patas y es largo)</small>
       </p>
     </div>
-    <input type="text" class="word-input" id="wordInput" placeholder="Escribe aquí…" autocomplete="off" autocorrect="off" spellcheck="false">
+    <input type="text" class="word-input" id="wordInput"
+           placeholder="Escribe aquí…"
+           autocomplete="off" autocorrect="off" spellcheck="false">
     <div class="attempts-line">Intentos restantes: <span id="attemptsLeft">3</span></div>
     <button class="btn-main" onclick="checkWord()" style="margin-top:4px">🔓 &nbsp; Descifrar</button>
   </div>
 </div>
 
-<!-- JUEGO 4 PUZZLE -->
+<!-- JUEGO 4 · PUZZLE -->
 <div id="screen-game5" class="screen">
   <div class="game-header">
     <div class="game-tag">🧩 Juego 4 de 4</div>
     <h2 class="game-title">El puzzle del amor</h2>
     <p class="game-sub">Arrastra las piezas al tablero para revelar la imagen</p>
   </div>
-  <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div></div>
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+  </div>
   <div class="puzzle-wrapper">
     <p class="info-text" style="margin-bottom:10px">📋 Tablero — suelta las piezas aquí</p>
     <div class="puzzle-board" id="puzzleBoard"></div>
@@ -779,9 +852,10 @@ body::before {
   </div>
 </div>
 
-<!-- PANTALLA POLAROID -->
+<!-- PANTALLA POLAROID · ÁLBUM DE RECUERDOS -->
 <div id="screen-polaroid" class="screen">
-  <button class="btn-back" onclick="polaroidGoBack()">← Volver</button>
+
+  <button class="btn-back" id="polaroidBackBtn" onclick="polaroidGoBack()">← Volver</button>
 
   <div class="polaroid-header">
     <h2 class="polaroid-header-title">Álbum de recuerdos</h2>
@@ -791,27 +865,31 @@ body::before {
   <div class="polaroid-upload-card">
     <div class="polaroid-upload-title">✨ Añadir una polaroid</div>
 
-    <!-- Selector de fuente -->
-    <div class="img-source-selector">
-      <div class="img-source-btn" id="galleryBtn">
-        <span class="src-icon">🖼️</span>
-        <span>Galería</span>
-        <input type="file" accept="image/*" onchange="onGallerySelect(event)">
-      </div>
-      <div class="img-source-btn" onclick="openCamera()">
-        <span class="src-icon">📸</span>
-        <span>Cámara frontal</span>
-      </div>
+    <div class="file-drop-zone" id="fileDropZone">
+      <input type="file" id="polaroidFileInput" accept="image/*" onchange="onPolaroidFileChange(event)">
+      <div class="file-drop-zone-icon" id="dropIcon">🌸</div>
+      <div class="file-drop-zone-label" id="dropLabel">Toca aquí para elegir una foto</div>
+      <img class="file-drop-zone-preview" id="filePreview" alt="Vista previa">
     </div>
 
-    <!-- Vista previa de imagen elegida -->
-    <div class="preview-container" id="previewContainer">
-      <img id="previewImg" alt="Vista previa">
-      <button class="preview-remove" onclick="clearPreview()">✕</button>
+    <textarea class="polaroid-text-input" id="polaroidCaption"
+              rows="2"
+              placeholder="Escribe algo bonito aquí…"></textarea>
+
+    <!-- PALETA DE COLORES -->
+    <div class="color-picker-wrap" id="colorPickerWrap">
+      <div class="color-picker-label">🎨 Color del texto:</div>
     </div>
 
-    <button class="btn-main" onclick="openEditor()" style="margin-top:0" id="editBtn" disabled>
-      ✏️ &nbsp; Personalizar y añadir
+    <button class="btn-secondary" onclick="startBeReal()" style="margin-bottom:10px;width:100%">
+      📸 Hacer foto tipo BeReal
+    </button>
+
+    <video id="cameraPreview" autoplay playsinline style="width:100%;border-radius:12px;display:none;margin-bottom:10px;"></video>
+    <p id="cameraStep" style="text-align:center;font-size:0.8rem;color:var(--text-soft);display:none"></p>
+
+    <button class="btn-main" onclick="addPolaroid()" style="margin-top:0">
+      📷 &nbsp; Guardar polaroid
     </button>
   </div>
 
@@ -825,9 +903,12 @@ body::before {
     <h1 class="final-title">¡Lo has conseguido!</h1>
     <div class="divider"></div>
     <div class="final-video-box">
-      <video id="finalVideo" src="video_final.mp4" controls playsinline poster="foto_final.jpg"
-             onerror="this.style.display='none';document.getElementById('finalImg').style.display='block'"></video>
-      <img id="finalImg" src="foto_final.jpg" alt="Sorpresa" style="display:none" onerror="this.style.display='none'">
+      <video id="finalVideo" src="video_final.mp4" controls playsinline
+             poster="foto_final.jpg"
+             onerror="this.style.display='none';document.getElementById('finalImg').style.display='block'">
+      </video>
+      <img id="finalImg" src="foto_final.jpg" alt="Sorpresa" style="display:none"
+           onerror="this.style.display='none'">
     </div>
     <div class="love-letter" style="margin-top:0">
       <div class="letter-head">Mi cielo,</div>
@@ -853,17 +934,17 @@ body::before {
    CONFIG
    ===================================================== */
 const GAME1 = [
-  { q: "¿Dónde te pedí salir?", image: "recuerdo2.jpg", emoji: "📍", opts: ["En un parquesito","En casita","En el Viena","En un bar"], correct: 2 },
-  { q: "¿Dónde nos hicimos esta foto?", image: "recuerdo1.jpg", emoji: "🎬", opts: ["En mi habitación de Madrid","En tu habitación de Madrid","En el pasillo","En otro sitio"], correct: 0 },
-  { q: "¿Cómo se llama mi obra de arte?", image: "recuerdo3.jpg", emoji: "📅", opts: ["José","El Joseee","María","Jesús"], correct: 1 },
+  { q: "¿Dónde te pedí salir?", image: "recuerdo2.jpg", emoji: "📍", opts: ["En un parquesito", "En casita", "En el Viena", "En un bar"], correct: 2 },
+  { q: "¿Dónde nos hicimos esta foto?", image: "recuerdo1.jpg", emoji: "🎬", opts: ["En mi habitación de Madrid", "En tu habitación de Madrid", "En el pasillo", "En otro sitio"], correct: 0 },
+  { q: "¿Cómo se llama mi obra de arte?", image: "recuerdo3.jpg", emoji: "📅", opts: ["José", "El Joseee", "María", "Jesús"], correct: 1 },
 ];
 
 const GAME2 = [
-  { q: "¿Cuál es mi color favorito?", opts: ["Azul","Rojo","Verde","Lila"], correct: 3 },
-  { q: "¿Cuál es mi bebida favorita?", opts: ["Fuz tea","Nestea","Agua","Coca-Cola"], correct: 0 },
-  { q: "¿Cuál es la canción de nuestra playlist?", opts: ["La que siempre pongo","La que me pusiste tú","La que bailamos juntos","La que me dedicas siempre"], correct: 2 },
-  { q: "¿Qué es lo que más me gusta de ti?", opts: ["Tu sonrisa","Tu forma de ser","Tu mirada","Todo de ti"], correct: 3 },
-  { q: "¿Cuál es nuestro lugar especial?", opts: ["Camita de arriba","Camita de abajo","Roslena","Donde tú estés"], correct: 0 },
+  { q: "¿Cuál es mi color favorito?", opts: ["Azul", "Rojo", "Verde", "Lila"], correct: 3 },
+  { q: "¿Cuál es mi bebida favorita?", opts: ["Fuz tea", "Nestea", "Agua", "Coca-Cola"], correct: 0 },
+  { q: "¿Cuál es la canción de nuestra playlist?", opts: ["La que siempre pongo", "La que me pusiste tú", "La que bailamos juntos", "La que me dedicas siempre"], correct: 2 },
+  { q: "¿Qué es lo que más me gusta de ti?", opts: ["Tu sonrisa", "Tu forma de ser", "Tu mirada", "Todo de ti"], correct: 3 },
+  { q: "¿Cuál es nuestro lugar especial?", opts: ["Camita de arriba", "Camita de abajo", "Roslena", "Donde tú estés"], correct: 0 },
 ];
 
 const SECRET_WORD = "salchi";
@@ -872,10 +953,54 @@ const VID_FAIL = "video_fallo.mp4";
 const PUZZLE_IMG = "foto_puzzle.jpg";
 
 /* =====================================================
+   PALETA DE COLORES PARA TEXTO
+   ===================================================== */
+const TEXT_COLORS = [
+  { color: '#5a3a4a', label: 'Oscuro (default)' },
+  { color: '#1a1a2e', label: 'Noche' },
+  { color: '#c0366a', label: 'Rosa fuerte' },
+  { color: '#8b1a4a', label: 'Burdeos' },
+  { color: '#d4a853', label: 'Dorado' },
+  { color: '#c89030', label: 'Ámbar' },
+  { color: '#2d6a4f', label: 'Verde bosque' },
+  { color: '#40916c', label: 'Esmeralda' },
+  { color: '#1d3557', label: 'Azul marino' },
+  { color: '#457b9d', label: 'Azul suave' },
+  { color: '#7b2d8b', label: 'Morado' },
+  { color: '#e07a5f', label: 'Terracota' },
+  { color: '#f4a261', label: 'Melocotón' },
+  { color: '#b5838d', label: 'Malva' },
+  { color: '#6b705c', label: 'Oliva' },
+  { color: '#264653', label: 'Petróleo' },
+];
+
+let selectedTextColor = TEXT_COLORS[0].color;
+
+function initColorPicker() {
+  const wrap = document.getElementById('colorPickerWrap');
+  // Clear existing swatches (keep label)
+  while (wrap.children.length > 1) wrap.removeChild(wrap.lastChild);
+
+  TEXT_COLORS.forEach((tc, i) => {
+    const sw = document.createElement('div');
+    sw.className = 'color-swatch' + (tc.color === selectedTextColor ? ' selected' : '');
+    sw.style.background = tc.color;
+    sw.title = tc.label;
+    sw.addEventListener('click', () => {
+      selectedTextColor = tc.color;
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+      sw.classList.add('selected');
+    });
+    wrap.appendChild(sw);
+  });
+}
+
+/* =====================================================
    ESTADO GLOBAL
    ===================================================== */
 let completed = JSON.parse(localStorage.getItem('bday_games') || 'null') || [0,0,0,0];
-let g1q = 0, g2q = 0, g2score = 0, g3att = 3;
+let g1q = 0, g2q = 0, g2score = 0;
+let g3att = 3;
 let piecesOnBoard = 0;
 let carIdx = 0, carTimer;
 let polaroidFromFinal = false;
@@ -905,11 +1030,20 @@ const TOTAL_SLIDES = 5;
    ===================================================== */
 const music    = document.getElementById('bgMusic');
 const musicBtn = document.getElementById('musicBtn');
+
 function tryAutoplay() {
   music.volume = 0.45;
-  music.play().then(() => { musicBtn.classList.remove('show'); }).catch(() => { musicBtn.classList.add('show'); });
+  music.play().then(() => {
+    musicBtn.classList.remove('show');
+  }).catch(() => {
+    musicBtn.classList.add('show');
+  });
 }
-function activateMusic() { music.play(); musicBtn.classList.remove('show'); }
+
+function activateMusic() {
+  music.play();
+  musicBtn.classList.remove('show');
+}
 
 /* =====================================================
    CARRUSEL
@@ -925,6 +1059,7 @@ function resetCarTimer() {
   clearInterval(carTimer);
   carTimer = setInterval(carouselNext, 3600);
 }
+
 let swipeX = 0;
 document.getElementById('mainCarousel').addEventListener('touchstart', e => { swipeX = e.touches[0].clientX; }, {passive:true});
 document.getElementById('mainCarousel').addEventListener('touchend', e => {
@@ -945,14 +1080,18 @@ function showScreen(id) {
    VIDEO MODAL
    ===================================================== */
 let videoTimerInterval = null;
+
 function showVideo(src, onEnd) {
   const modal = document.getElementById('videoModal');
   const vid   = document.getElementById('modalVideo');
   const count = document.getElementById('timerCount');
+
   if (videoTimerInterval) clearInterval(videoTimerInterval);
+
   vid.src = src;
   modal.style.display = 'flex';
   vid.play().catch(() => {});
+
   let t = 5;
   count.textContent = t;
   videoTimerInterval = setInterval(() => {
@@ -970,19 +1109,21 @@ function showVideo(src, onEnd) {
 }
 
 /* =====================================================
-   JUEGOS — NAVEGACIÓN
+   NAVEGACIÓN JUEGOS
    ===================================================== */
 function startGames() {
   const next = completed.indexOf(0);
   if (next === -1) unlockFinal();
   else goToGame(next);
 }
+
 function goToGame(idx) {
   const inits   = [initG1, initG2, initG3, initG5];
   const screens = ['screen-game1','screen-game2','screen-game3','screen-game5'];
   inits[idx]();
   showScreen(screens[idx]);
 }
+
 function completeGame(idx) {
   completed[idx] = 1;
   localStorage.setItem('bday_games', JSON.stringify(completed));
@@ -992,6 +1133,7 @@ function completeGame(idx) {
     else unlockFinal();
   }, 350);
 }
+
 function unlockFinal() {
   showScreen('screen-final');
   startConfetti();
@@ -1003,49 +1145,68 @@ function unlockFinal() {
    JUEGO 1
    ===================================================== */
 function initG1() { g1q = 0; renderG1(); }
+
 function renderG1() {
   const d = GAME1[g1q];
   document.getElementById('g1Counter').textContent = `Pregunta ${g1q+1} de ${GAME1.length}`;
   document.getElementById('g1Question').textContent = d.q;
-  const img = document.getElementById('g1Img');
+
+  const img   = document.getElementById('g1Img');
   const emoji = document.getElementById('g1Emoji');
-  img.src = d.image; img.style.display = 'block'; emoji.style.display = 'none';
+  img.src = d.image;
+  img.style.display = 'block';
+  emoji.style.display = 'none';
   img.onerror = () => { img.style.display='none'; emoji.style.display='block'; emoji.textContent = d.emoji; };
+
   const optsEl = document.getElementById('g1Options');
   optsEl.innerHTML = '';
   d.opts.forEach((o, i) => {
     const b = document.createElement('button');
-    b.className = 'opt-btn'; b.textContent = o;
+    b.className = 'opt-btn';
+    b.textContent = o;
     b.onclick = () => { disableOpts('g1Options'); answerG1(i); };
     optsEl.appendChild(b);
   });
 }
+
 function answerG1(sel) {
   const ok = sel === GAME1[g1q].correct;
-  showVideo(ok ? VID_OK : VID_FAIL, () => { g1q++; if (g1q < GAME1.length) renderG1(); else completeGame(0); });
+  showVideo(ok ? VID_OK : VID_FAIL, () => {
+    g1q++;
+    if (g1q < GAME1.length) renderG1();
+    else completeGame(0);
+  });
 }
 
 /* =====================================================
    JUEGO 2
    ===================================================== */
 function initG2() { g2q = 0; g2score = 0; document.getElementById('g2Score').textContent = 0; renderG2(); }
+
 function renderG2() {
   const d = GAME2[g2q];
   document.getElementById('g2Counter').textContent = `Pregunta ${g2q+1} de ${GAME2.length}`;
   document.getElementById('g2Question').textContent = d.q;
+
   const optsEl = document.getElementById('g2Options');
   optsEl.innerHTML = '';
   d.opts.forEach((o, i) => {
     const b = document.createElement('button');
-    b.className = 'opt-btn'; b.textContent = o;
+    b.className = 'opt-btn';
+    b.textContent = o;
     b.onclick = () => { disableOpts('g2Options'); answerG2(i); };
     optsEl.appendChild(b);
   });
 }
+
 function answerG2(sel) {
   const ok = sel === GAME2[g2q].correct;
   if (ok) { g2score++; document.getElementById('g2Score').textContent = g2score; }
-  showVideo(ok ? VID_OK : VID_FAIL, () => { g2q++; if (g2q < GAME2.length) renderG2(); else completeGame(1); });
+  showVideo(ok ? VID_OK : VID_FAIL, () => {
+    g2q++;
+    if (g2q < GAME2.length) renderG2();
+    else completeGame(1);
+  });
 }
 
 /* =====================================================
@@ -1056,93 +1217,135 @@ function initG3() {
   document.getElementById('attemptsLeft').textContent = g3att;
   document.getElementById('wordInput').value = '';
 }
+
 function checkWord() {
   const val = document.getElementById('wordInput').value.trim().toLowerCase().replace(/\s+/g,'');
   const ok  = val === SECRET_WORD.toLowerCase();
+
   if (ok) {
     showVideo(VID_OK, () => completeGame(2));
   } else {
     g3att--;
     document.getElementById('attemptsLeft').textContent = Math.max(0, g3att);
     showVideo(VID_FAIL, () => {
-      if (g3att <= 0) { g3att = 3; completeGame(2); }
-      else document.getElementById('wordInput').value = '';
+      if (g3att <= 0) {
+        g3att = 3;
+        completeGame(2);
+      } else {
+        document.getElementById('wordInput').value = '';
+      }
     });
   }
 }
-document.getElementById('wordInput').addEventListener('keypress', e => { if (e.key === 'Enter') checkWord(); });
+
+document.getElementById('wordInput').addEventListener('keypress', e => {
+  if (e.key === 'Enter') checkWord();
+});
 
 /* =====================================================
-   JUEGO 4 — PUZZLE
+   JUEGO 4 (PUZZLE)
    ===================================================== */
 const PS = 3;
-let activeDrag = null, touchDrag = null, ghost = null;
+let activeDrag = null;
+let touchDrag  = null;
+let ghost      = null;
 
 function initG5() {
   piecesOnBoard = 0;
   document.getElementById('piecesPlaced').textContent = 0;
-  document.getElementById('puzzleStatus').innerHTML = 'Piezas colocadas: <span id="piecesPlaced">0</span> / 9';
+  document.getElementById('puzzleStatus').innerHTML =
+    'Piezas colocadas: <span id="piecesPlaced">0</span> / 9';
   buildPuzzle();
 }
+
 function buildPuzzle() {
   const board = document.getElementById('puzzleBoard');
   const pool  = document.getElementById('puzzlePool');
-  board.innerHTML = ''; pool.innerHTML = '';
+  board.innerHTML = '';
+  pool.innerHTML  = '';
+
   for (let i = 0; i < PS * PS; i++) {
     const sl = document.createElement('div');
-    sl.className = 'puzzle-slot'; sl.dataset.slot = i;
-    sl.addEventListener('dragover', onSlotOver);
+    sl.className = 'puzzle-slot';
+    sl.dataset.slot = i;
+    sl.addEventListener('dragover',  onSlotOver);
     sl.addEventListener('dragleave', onSlotLeave);
-    sl.addEventListener('drop', onSlotDrop);
+    sl.addEventListener('drop',      onSlotDrop);
     board.appendChild(sl);
   }
-  shuffle([...Array(PS*PS).keys()]).forEach(pi => pool.appendChild(makePiece(pi)));
+
+  const idxs = shuffle([...Array(PS*PS).keys()]);
+  idxs.forEach(pi => pool.appendChild(makePiece(pi)));
 }
+
 function makePiece(pi) {
-  const row = Math.floor(pi / PS), col = pi % PS;
-  const el = document.createElement('div');
-  el.className = 'p-piece'; el.draggable = true; el.dataset.piece = pi;
-  el.style.backgroundImage = `url('${PUZZLE_IMG}')`;
-  el.style.backgroundSize = `${PS*100}% ${PS*100}%`;
+  const row = Math.floor(pi / PS);
+  const col = pi % PS;
+  const el  = document.createElement('div');
+  el.className     = 'p-piece';
+  el.draggable     = true;
+  el.dataset.piece = pi;
+
+  el.style.backgroundImage    = `url('${PUZZLE_IMG}')`;
+  el.style.backgroundSize     = `${PS*100}% ${PS*100}%`;
   el.style.backgroundPosition = `${col*(100/(PS-1))}% ${row*(100/(PS-1))}%`;
+
   const FALLBACK = ['#6d1438','#8b1a4a','#c0366a','#9e2b5a','#b83060','#d4a853','#4a1a3a','#2d0f1e','#7a2245'];
   el.style.backgroundColor = FALLBACK[pi] || '#333';
+
   el.addEventListener('dragstart', e => { activeDrag = el; el.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
-  el.addEventListener('dragend', () => { if(activeDrag) activeDrag.classList.remove('dragging'); activeDrag=null; });
+  el.addEventListener('dragend',   () => { if(activeDrag) activeDrag.classList.remove('dragging'); activeDrag=null; });
+
   el.addEventListener('touchstart', onTouchStart, {passive:true});
   el.addEventListener('touchmove',  onTouchMove,  {passive:false});
   el.addEventListener('touchend',   onTouchEnd,   {passive:true});
+
   return el;
 }
+
 function onSlotOver(e)  { e.preventDefault(); if(!e.currentTarget.querySelector('.p-piece.placed')) e.currentTarget.classList.add('drag-over'); }
 function onSlotLeave(e) { e.currentTarget.classList.remove('drag-over'); }
 function onSlotDrop(e) {
-  e.preventDefault(); const sl = e.currentTarget;
+  e.preventDefault();
+  const sl = e.currentTarget;
   sl.classList.remove('drag-over');
   if (!activeDrag || sl.querySelector('.p-piece.placed')) return;
   placePiece(activeDrag, sl);
 }
+
 function onTouchStart(e) {
   touchDrag = e.currentTarget;
-  const t = e.touches[0];
-  ghost = touchDrag.cloneNode(true);
-  const w = touchDrag.offsetWidth, h = touchDrag.offsetHeight;
-  Object.assign(ghost.style, { position:'fixed', zIndex:'9990', opacity:'0.82', pointerEvents:'none', width:w+'px', height:h+'px', left:(t.clientX - w/2)+'px', top:(t.clientY - h/2)+'px', border:'2px solid var(--gold)', borderRadius:'8px', transition:'none' });
+  const t   = e.touches[0];
+  ghost     = touchDrag.cloneNode(true);
+  const w   = touchDrag.offsetWidth;
+  const h   = touchDrag.offsetHeight;
+  Object.assign(ghost.style, {
+    position:'fixed', zIndex:'9990', opacity:'0.82',
+    pointerEvents:'none', width:w+'px', height:h+'px',
+    left:(t.clientX - w/2)+'px', top:(t.clientY - h/2)+'px',
+    border:'2px solid var(--gold)', borderRadius:'8px', transition:'none',
+  });
   document.body.appendChild(ghost);
   touchDrag.style.opacity = '0.3';
 }
+
 function onTouchMove(e) {
   e.preventDefault();
   if (!ghost) return;
   const t = e.touches[0];
   ghost.style.left = (t.clientX - parseInt(ghost.style.width)/2)  + 'px';
   ghost.style.top  = (t.clientY - parseInt(ghost.style.height)/2) + 'px';
+
   ghost.style.display = 'none';
   const under = document.elementFromPoint(t.clientX, t.clientY);
   ghost.style.display = '';
   document.querySelectorAll('.puzzle-slot').forEach(s => s.classList.remove('drag-over'));
-  if (under) { const sl = under.closest?.('.puzzle-slot'); if (sl && !sl.querySelector('.p-piece.placed')) sl.classList.add('drag-over'); }
+  if (under) {
+    const sl = under.closest?.('.puzzle-slot');
+    if (sl && !sl.querySelector('.p-piece.placed')) sl.classList.add('drag-over');
+  }
 }
+
 function onTouchEnd(e) {
   if (!ghost || !touchDrag) return;
   const t = e.changedTouches[0];
@@ -1150,318 +1353,127 @@ function onTouchEnd(e) {
   const under = document.elementFromPoint(t.clientX, t.clientY);
   ghost.remove(); ghost = null;
   touchDrag.style.opacity = '1';
-  if (under) { const sl = under.closest?.('.puzzle-slot'); if (sl && !sl.querySelector('.p-piece.placed')) placePiece(touchDrag, sl); }
+  if (under) {
+    const sl = under.closest?.('.puzzle-slot');
+    if (sl && !sl.querySelector('.p-piece.placed')) placePiece(touchDrag, sl);
+  }
   document.querySelectorAll('.puzzle-slot').forEach(s => s.classList.remove('drag-over'));
   touchDrag = null;
 }
+
 function placePiece(piece, slot) {
-  const pi = parseInt(piece.dataset.piece), si = parseInt(slot.dataset.slot);
+  const pi  = parseInt(piece.dataset.piece);
+  const si  = parseInt(slot.dataset.slot);
+
   const clone = piece.cloneNode(true);
-  clone.classList.add('placed'); clone.classList.remove('dragging');
-  clone.draggable = false; clone.style.width = '100%'; clone.style.height = '100%';
-  clone.style.backgroundSize = `${PS*100}% ${PS*100}%`;
+  clone.classList.add('placed');
+  clone.classList.remove('dragging');
+  clone.draggable = false;
+  clone.style.width  = '100%';
+  clone.style.height = '100%';
+  clone.style.backgroundSize     = `${PS*100}% ${PS*100}%`;
   clone.style.backgroundPosition = piece.style.backgroundPosition;
   clone.style.removeProperty('transition');
   clone.ontouchstart = null; clone.ondragstart = null;
-  slot.appendChild(clone); piece.remove();
+  slot.appendChild(clone);
+  piece.remove();
+
   slot.classList.toggle('correct', pi === si);
   slot.classList.toggle('wrong',   pi !== si);
+
   piecesOnBoard++;
   document.getElementById('piecesPlaced').textContent = piecesOnBoard;
+
   if (piecesOnBoard === PS * PS) {
     setTimeout(() => {
-      document.getElementById('puzzleStatus').innerHTML = '<span style="color:var(--gold-light)">✨ ¡Puzzle completado! ✨</span>';
+      document.getElementById('puzzleStatus').innerHTML =
+        '<span style="color:var(--gold-light)">✨ ¡Puzzle completado! ✨</span>';
       showVideo(VID_OK, () => completeGame(3));
     }, 400);
   }
 }
 
 /* =====================================================
-   POLAROID — ÁLBUM
+   POLAROID — ÁLBUM DE RECUERDOS
    ===================================================== */
 const POLAROID_KEY = 'bday_polaroids';
 let polaroids = [];
 let pendingImageBase64 = null;
+
 const ROTATIONS = [-4, -2.5, -1.5, 1, 2, 3.5, -3, 1.5, -1, 4, -2, 2.5];
 
 function initPolaroid() {
   polaroids = loadPolaroidsFromStorage();
   renderPolaroidGrid();
-  clearPreview();
+  // Reset form
+  pendingImageBase64 = null;
+  selectedTextColor = TEXT_COLORS[0].color;
+  document.getElementById('filePreview').style.display = 'none';
+  document.getElementById('dropIcon').style.display    = 'block';
+  document.getElementById('dropLabel').style.display   = 'block';
+  document.getElementById('polaroidCaption').value     = '';
+  document.getElementById('polaroidFileInput').value   = '';
+  initColorPicker();
 }
 
 function loadPolaroidsFromStorage() {
-  try { const raw = localStorage.getItem(POLAROID_KEY); return raw ? JSON.parse(raw) : []; } catch(e) { return []; }
-}
-function savePolaroidsToStorage() {
-  try { localStorage.setItem(POLAROID_KEY, JSON.stringify(polaroids)); } catch(e) { alert('No se pudo guardar: el almacenamiento puede estar lleno.'); }
+  try {
+    const raw = localStorage.getItem(POLAROID_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
 }
 
-/* --- Galería --- */
-function onGallerySelect(event) {
+function savePolaroidsToStorage() {
+  try {
+    localStorage.setItem(POLAROID_KEY, JSON.stringify(polaroids));
+  } catch (e) {
+    alert('No se pudo guardar: el almacenamiento puede estar lleno.');
+  }
+}
+
+function onPolaroidFileChange(event) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(e) { setPreviewImage(e.target.result); };
+  reader.onload = function(e) {
+    pendingImageBase64 = e.target.result;
+    const preview = document.getElementById('filePreview');
+    preview.src   = pendingImageBase64;
+    preview.style.display = 'block';
+    document.getElementById('dropIcon').style.display  = 'none';
+    document.getElementById('dropLabel').style.display = 'none';
+  };
   reader.readAsDataURL(file);
 }
 
-/* --- Cámara frontal --- */
-let cameraStream = null;
-
-function openCamera() {
-  const overlay = document.getElementById('cameraOverlay');
-  const video   = document.getElementById('cameraVideo');
-  overlay.classList.add('show');
-
-  // Frontal siempre
-  const constraints = { video: { facingMode: { ideal: 'user' }, width: { ideal: 1280 }, height: { ideal: 1280 } }, audio: false };
-
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then(stream => {
-      cameraStream = stream;
-      video.srcObject = stream;
-    })
-    .catch(err => {
-      console.error(err);
-      overlay.classList.remove('show');
-      alert('No se pudo acceder a la cámara. Revisa los permisos del navegador 📷');
-    });
-}
-
-function capturePhoto() {
-  const video  = document.getElementById('cameraVideo');
-  const canvas = document.createElement('canvas');
-  // Cuadrado — recorte centrado
-  const size = Math.min(video.videoWidth, video.videoHeight);
-  canvas.width  = size;
-  canvas.height = size;
-  const ctx = canvas.getContext('2d');
-  // Espejo horizontal (como el visor)
-  ctx.translate(size, 0);
-  ctx.scale(-1, 1);
-  const offsetX = (video.videoWidth  - size) / 2;
-  const offsetY = (video.videoHeight - size) / 2;
-  ctx.drawImage(video, offsetX, offsetY, size, size, 0, 0, size, size);
-  const imgData = canvas.toDataURL('image/jpeg', 0.92);
-  closeCamera();
-  setPreviewImage(imgData);
-}
-
-function closeCamera() {
-  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
-  document.getElementById('cameraVideo').srcObject = null;
-  document.getElementById('cameraOverlay').classList.remove('show');
-}
-
-function setPreviewImage(base64) {
-  pendingImageBase64 = base64;
-  const container = document.getElementById('previewContainer');
-  const img = document.getElementById('previewImg');
-  img.src = base64;
-  container.style.display = 'block';
-  document.getElementById('editBtn').disabled = false;
-}
-
-function clearPreview() {
-  pendingImageBase64 = null;
-  document.getElementById('previewContainer').style.display = 'none';
-  document.getElementById('previewImg').src = '';
-  document.getElementById('editBtn').disabled = true;
-  // Reset file input
-  const fi = document.querySelector('#screen-polaroid input[type="file"]');
-  if (fi) fi.value = '';
-}
-
-/* --- EDITOR --- */
-const EMOJIS_EDITOR = ['❤️','💕','🌹','✨','🎂','🥳','💋','🌸','💖','🦋','🌟','💫','🎉','🫶','😍'];
-const TEXT_COLORS   = ['#ffffff','#ffe0f0','#d4a853','#ffb6c1','#c0366a','#000000','#7b2d8b','#4a90d9'];
-
-let editorEmojis   = []; // [{emoji, x, y, size}]
-let draggingEmoji  = null;
-let selectedColor  = '#ffffff';
-let editorImg      = null;
-
-function openEditor() {
-  if (!pendingImageBase64) return;
-  document.getElementById('editorCaption').value = '';
-  editorEmojis = [];
-  selectedColor = '#ffffff';
-
-  // Build emoji picker
-  const row = document.getElementById('emojiPicker');
-  row.innerHTML = '';
-  EMOJIS_EDITOR.forEach(em => {
-    const btn = document.createElement('button');
-    btn.className = 'emoji-pick-btn';
-    btn.textContent = em;
-    btn.onclick = () => addEmojiToCanvas(em);
-    row.appendChild(btn);
-  });
-
-  // Build color row
-  const cr = document.getElementById('colorRow');
-  cr.innerHTML = '';
-  TEXT_COLORS.forEach(c => {
-    const sw = document.createElement('div');
-    sw.className = 'color-swatch';
-    sw.style.background = c;
-    if (c === selectedColor) sw.classList.add('selected');
-    sw.onclick = () => {
-      selectedColor = c;
-      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
-      sw.classList.add('selected');
-      renderEditorCanvas();
-    };
-    cr.appendChild(sw);
-  });
-
-  // Load image
-  editorImg = new Image();
-  editorImg.onload = () => renderEditorCanvas();
-  editorImg.src = pendingImageBase64;
-
-  document.getElementById('editorOverlay').classList.add('show');
-
-  // Touch drag for emojis on canvas
-  const canvas = document.getElementById('editorCanvas');
-  canvas.addEventListener('touchstart', onEmojiTouchStart, {passive:false});
-  canvas.addEventListener('touchmove',  onEmojiTouchMove,  {passive:false});
-  canvas.addEventListener('touchend',   onEmojiTouchEnd,   {passive:true});
-  canvas.addEventListener('mousedown',  onEmojiMouseDown);
-  canvas.addEventListener('mousemove',  onEmojiMouseMove);
-  canvas.addEventListener('mouseup',    onEmojiMouseUp);
-}
-
-function closeEditor() {
-  document.getElementById('editorOverlay').classList.remove('show');
-  const canvas = document.getElementById('editorCanvas');
-  canvas.removeEventListener('touchstart', onEmojiTouchStart);
-  canvas.removeEventListener('touchmove',  onEmojiTouchMove);
-  canvas.removeEventListener('touchend',   onEmojiTouchEnd);
-  canvas.removeEventListener('mousedown',  onEmojiMouseDown);
-  canvas.removeEventListener('mousemove',  onEmojiMouseMove);
-  canvas.removeEventListener('mouseup',    onEmojiMouseUp);
-}
-
-function renderEditorCanvas() {
-  const canvas = document.getElementById('editorCanvas');
-  const ctx    = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
-
-  // Fondo blanco (marco polaroid)
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, W, H);
-
-  // Imagen (cuadrada, centrada arriba con margen)
-  const imgPad = 16;
-  const imgSize = W - imgPad * 2;
-  if (editorImg && editorImg.complete) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.rect(imgPad, imgPad, imgSize, imgSize);
-    ctx.clip();
-    // Mantener ratio
-    const ratio = Math.min(imgSize / editorImg.naturalWidth, imgSize / editorImg.naturalHeight);
-    const dw = editorImg.naturalWidth  * ratio;
-    const dh = editorImg.naturalHeight * ratio;
-    const dx = imgPad + (imgSize - dw) / 2;
-    const dy = imgPad + (imgSize - dh) / 2;
-    ctx.drawImage(editorImg, dx, dy, dw, dh);
-    ctx.restore();
+function addPolaroid() {
+  if (!pendingImageBase64) {
+    alert('Primero elige una foto 📷');
+    return;
   }
-
-  // Emojis sobre la imagen
-  editorEmojis.forEach(em => {
-    ctx.font = `${em.size}px serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(em.emoji, em.x, em.y);
-  });
-
-  // Texto del pie
-  const caption = document.getElementById('editorCaption')?.value?.trim() || '';
-  if (caption) {
-    ctx.font = `italic 22px "Lora", serif`;
-    ctx.fillStyle = selectedColor;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
-    ctx.fillText(caption.length > 28 ? caption.slice(0,28)+'…' : caption, W/2, ty);
-  }
-}
-
-function addEmojiToCanvas(emoji) {
-  editorEmojis.push({ emoji, x: 200, y: 200, size: 48 });
-  renderEditorCanvas();
-}
-
-// Drag emojis on canvas
-function getCanvasPos(canvas, clientX, clientY) {
-  const rect  = canvas.getBoundingClientRect();
-  const scaleX = canvas.width  / rect.width;
-  const scaleY = canvas.height / rect.height;
-  return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
-}
-
-function findEmojiAt(x, y) {
-  for (let i = editorEmojis.length - 1; i >= 0; i--) {
-    const em = editorEmojis[i];
-    if (Math.abs(x - em.x) < em.size * 0.7 && Math.abs(y - em.y) < em.size * 0.7) return i;
-  }
-  return -1;
-}
-
-function onEmojiTouchStart(e) {
-  e.preventDefault();
-  const canvas = document.getElementById('editorCanvas');
-  const t = e.touches[0];
-  const pos = getCanvasPos(canvas, t.clientX, t.clientY);
-  const idx = findEmojiAt(pos.x, pos.y);
-  if (idx !== -1) draggingEmoji = idx;
-}
-function onEmojiTouchMove(e) {
-  e.preventDefault();
-  if (draggingEmoji === null) return;
-  const canvas = document.getElementById('editorCanvas');
-  const t = e.touches[0];
-  const pos = getCanvasPos(canvas, t.clientX, t.clientY);
-  editorEmojis[draggingEmoji].x = pos.x;
-  editorEmojis[draggingEmoji].y = pos.y;
-  renderEditorCanvas();
-}
-function onEmojiTouchEnd() { draggingEmoji = null; }
-
-function onEmojiMouseDown(e) {
-  const canvas = document.getElementById('editorCanvas');
-  const pos = getCanvasPos(canvas, e.clientX, e.clientY);
-  const idx = findEmojiAt(pos.x, pos.y);
-  if (idx !== -1) draggingEmoji = idx;
-}
-function onEmojiMouseMove(e) {
-  if (draggingEmoji === null) return;
-  const canvas = document.getElementById('editorCanvas');
-  const pos = getCanvasPos(canvas, e.clientX, e.clientY);
-  editorEmojis[draggingEmoji].x = pos.x;
-  editorEmojis[draggingEmoji].y = pos.y;
-  renderEditorCanvas();
-}
-function onEmojiMouseUp() { draggingEmoji = null; }
-
-function saveFromEditor() {
-  const canvas  = document.getElementById('editorCanvas');
-  const caption = document.getElementById('editorCaption').value.trim() || '❤️';
-  renderEditorCanvas(); // asegura estado final
-  const finalImg = canvas.toDataURL('image/jpeg', 0.92);
-
-  const pol = { id: Date.now(), image: finalImg, text: caption };
+  const caption = document.getElementById('polaroidCaption').value.trim();
+  const pol = {
+    id:        Date.now(),
+    image:     pendingImageBase64,
+    text:      caption || '❤️',
+    textColor: selectedTextColor,
+    bw:        false,
+  };
   polaroids.unshift(pol);
   savePolaroidsToStorage();
   renderPolaroidGrid();
 
-  closeEditor();
-  clearPreview();
+  // Reset form
+  pendingImageBase64 = null;
+  selectedTextColor = TEXT_COLORS[0].color;
+  document.getElementById('filePreview').style.display = 'none';
+  document.getElementById('dropIcon').style.display    = 'block';
+  document.getElementById('dropLabel').style.display   = 'block';
+  document.getElementById('polaroidCaption').value     = '';
+  document.getElementById('polaroidFileInput').value   = '';
+  initColorPicker();
 }
 
 function deletePolaroid(id) {
@@ -1470,9 +1482,18 @@ function deletePolaroid(id) {
   renderPolaroidGrid();
 }
 
+function toggleBW(id) {
+  const pol = polaroids.find(p => p.id === id);
+  if (!pol) return;
+  pol.bw = !pol.bw;
+  savePolaroidsToStorage();
+  renderPolaroidGrid();
+}
+
 function renderPolaroidGrid() {
   const grid = document.getElementById('polaroidGrid');
   grid.innerHTML = '';
+
   if (polaroids.length === 0) {
     const empty = document.createElement('div');
     empty.className = 'polaroid-empty';
@@ -1480,28 +1501,65 @@ function renderPolaroidGrid() {
     grid.appendChild(empty);
     return;
   }
+
   polaroids.forEach((pol, i) => {
     const rot = ROTATIONS[i % ROTATIONS.length];
     const card = document.createElement('div');
     card.className = 'polaroid-card';
     card.style.setProperty('--pol-rot', rot + 'deg');
     card.style.transform = `rotate(${rot}deg)`;
+
+    // Imagen
     const img = document.createElement('img');
-    img.src = pol.image; img.alt = pol.text;
+    img.src = pol.image;
+    img.alt = pol.text;
+    if (pol.bw) img.classList.add('bw');
+
+    // Pie de foto
     const caption = document.createElement('div');
     caption.className = 'polaroid-caption';
-    caption.title = pol.text; caption.textContent = pol.text;
+    caption.title = pol.text;
+    caption.textContent = pol.text;
+    // Color: negro en BN, color original en color
+    caption.style.color = pol.bw ? '#000' : (pol.textColor || TEXT_COLORS[0].color);
+
+    // Contenedor de botones
+    const actions = document.createElement('div');
+    actions.className = 'polaroid-actions';
+
+    // Botón BN
+    const bwBtn = document.createElement('button');
+    bwBtn.className = 'polaroid-action-btn btn-bw' + (pol.bw ? ' active' : '');
+    bwBtn.textContent = '🖤';
+    bwBtn.title = pol.bw ? 'Quitar blanco y negro' : 'Blanco y negro';
+    bwBtn.onclick = (e) => { e.stopPropagation(); toggleBW(pol.id); };
+
+    // Botón eliminar
     const delBtn = document.createElement('button');
-    delBtn.className = 'polaroid-delete'; delBtn.textContent = '✕'; delBtn.title = 'Eliminar polaroid';
-    delBtn.onclick = (e) => { e.stopPropagation(); if (confirm('¿Eliminar este recuerdo? 💔')) deletePolaroid(pol.id); };
-    card.appendChild(delBtn); card.appendChild(img); card.appendChild(caption);
+    delBtn.className = 'polaroid-action-btn btn-delete';
+    delBtn.textContent = '✕';
+    delBtn.title = 'Eliminar polaroid';
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (confirm('¿Eliminar este recuerdo? 💔')) deletePolaroid(pol.id);
+    };
+
+    actions.appendChild(bwBtn);
+    actions.appendChild(delBtn);
+    card.appendChild(actions);
+    card.appendChild(img);
+    card.appendChild(caption);
     grid.appendChild(card);
   });
 }
 
 function polaroidGoBack() {
-  if (polaroidFromFinal) { showScreen('screen-final'); polaroidFromFinal = false; }
-  else showScreen('screen-greeting');
+  if (polaroidFromFinal) {
+    showScreen('screen-final');
+    polaroidFromFinal = false;
+  } else {
+    showScreen('screen-greeting');
+  }
 }
 
 /* =====================================================
@@ -1509,13 +1567,19 @@ function polaroidGoBack() {
    ===================================================== */
 function startConfetti() {
   const canvas = document.getElementById('confettiCanvas');
-  canvas.style.display = 'block'; canvas.width = innerWidth; canvas.height = innerHeight;
+  canvas.style.display = 'block';
+  canvas.width  = innerWidth;
+  canvas.height = innerHeight;
   const ctx = canvas.getContext('2d');
   const cols = ['#c0366a','#d4a853','#f5e6d3','#e8678a','#fff','#ffb6c1'];
   const P = Array.from({length:120}, () => ({
-    x: Math.random() * canvas.width, y: Math.random() * canvas.height - canvas.height,
-    sz: 4 + Math.random() * 8, c: cols[Math.random()*cols.length|0],
-    sp: 1.5 + Math.random() * 3, a: Math.random() * Math.PI * 2, r: (Math.random()-.5)*.18,
+    x:  Math.random() * canvas.width,
+    y:  Math.random() * canvas.height - canvas.height,
+    sz: 4 + Math.random() * 8,
+    c:  cols[Math.random()*cols.length|0],
+    sp: 1.5 + Math.random() * 3,
+    a:  Math.random() * Math.PI * 2,
+    r:  (Math.random()-.5)*.18,
   }));
   let frame = 0;
   (function draw() {
@@ -1523,7 +1587,8 @@ function startConfetti() {
     P.forEach(p => {
       p.y += p.sp; p.a += p.r; p.x += Math.sin(p.a)*1.8;
       ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a);
-      ctx.fillStyle = p.c; ctx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);
       ctx.restore();
       if (p.y > canvas.height) p.y = -10;
     });
@@ -1536,12 +1601,114 @@ function startConfetti() {
    UTILITY
    ===================================================== */
 function shuffle(arr) {
-  for (let i=arr.length-1; i>0; i--) { const j=Math.random()*(i+1)|0; [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  for (let i=arr.length-1; i>0; i--) {
+    const j = Math.random()*(i+1)|0;
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
   return arr;
 }
-function disableOpts(id) { document.querySelectorAll(`#${id} .opt-btn`).forEach(b => b.disabled = true); }
 
-window.addEventListener('DOMContentLoaded', () => { tryAutoplay(); resetCarTimer(); });
+function disableOpts(id) {
+  document.querySelectorAll(`#${id} .opt-btn`).forEach(b => b.disabled = true);
+}
+
+/* =====================================================
+   MODO BEREAL
+   ===================================================== */
+let beRealStep = 0;
+let backImage = null;
+let frontImage = null;
+let currentStream = null;
+
+function startBeReal() {
+  beRealStep = 1;
+  document.getElementById('cameraStep').style.display = 'block';
+  startCamera('environment');
+}
+
+function startCamera(facingMode) {
+  const video = document.getElementById('cameraPreview');
+  const stepText = document.getElementById('cameraStep');
+
+  if (currentStream) currentStream.getTracks().forEach(track => track.stop());
+
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { ideal: facingMode } }
+  }).then(stream => {
+    currentStream = stream;
+    video.srcObject = stream;
+    video.style.display = 'block';
+    stepText.textContent = beRealStep === 1
+      ? "📷 Foto trasera (toca pantalla)"
+      : "🤳 Foto delantera (toca pantalla)";
+    video.onclick = captureBeReal;
+  }).catch((err) => {
+    console.error(err);
+    alert("No se pudo acceder a la cámara. Asegúrate de dar permisos 😢");
+  });
+}
+
+function captureBeReal() {
+  const video = document.getElementById('cameraPreview');
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const imgData = canvas.toDataURL('image/jpeg');
+
+  if (beRealStep === 1) {
+    backImage = imgData;
+    beRealStep = 2;
+    startCamera('user');
+  } else {
+    frontImage = imgData;
+    finishBeReal();
+  }
+}
+
+function finishBeReal() {
+  const finalCanvas = document.createElement('canvas');
+  const size = 600;
+  finalCanvas.width = size;
+  finalCanvas.height = size;
+  const ctx = finalCanvas.getContext('2d');
+
+  const imgBack = new Image();
+  const imgFront = new Image();
+  imgBack.src = backImage;
+  imgFront.src = frontImage;
+
+  imgBack.onload = () => {
+    ctx.drawImage(imgBack, 0, 0, size, size);
+    imgFront.onload = () => {
+      const smallSize = size * 0.35;
+      const margin = 15;
+      ctx.drawImage(imgFront, size - smallSize - margin, size - smallSize - margin, smallSize, smallSize);
+      pendingImageBase64 = finalCanvas.toDataURL('image/jpeg');
+      const preview = document.getElementById('filePreview');
+      preview.src = pendingImageBase64;
+      preview.style.display = 'block';
+      document.getElementById('dropIcon').style.display = 'none';
+      document.getElementById('dropLabel').style.display = 'none';
+      stopCamera();
+    };
+  };
+}
+
+function stopCamera() {
+  if (currentStream) currentStream.getTracks().forEach(track => track.stop());
+  document.getElementById('cameraPreview').style.display = 'none';
+  document.getElementById('cameraStep').style.display = 'none';
+  beRealStep = 0;
+}
+
+/* =====================================================
+   ARRANQUE
+   ===================================================== */
+window.addEventListener('DOMContentLoaded', () => {
+  tryAutoplay();
+  resetCarTimer();
+});
 </script>
 </body>
 </html>
