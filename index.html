@@ -412,7 +412,7 @@ body::before {
 .camera-overlay video {
   width: 100%; max-width: 480px; max-height: 70vh;
   object-fit: cover; border-radius: 16px;
-  transform: scaleX(-1); /* espejo para frontal */
+  transform: scaleX(-1);
 }
 .camera-ui {
   display: flex; flex-direction: column;
@@ -439,28 +439,6 @@ body::before {
   border-radius: 10px; font-family: 'Lora', serif;
   font-size: 0.85rem; cursor: pointer;
 }
-.camera-mode-toggle {
-  display: flex; gap: 10px; margin-bottom: 6px;
-}
-.cam-mode-btn {
-  padding: 8px 20px; border-radius: 20px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.7);
-  font-family: 'Lora', serif; font-size: 0.82rem; cursor: pointer;
-  transition: all 0.2s;
-}
-.cam-mode-btn.active {
-  background: var(--rose);
-  border-color: var(--rose);
-  color: #fff;
-}
-.rec-indicator {
-  color: #ff4444; font-size: 0.9rem;
-  font-family: 'Lora', serif; font-style: italic;
-  animation: recBlink 1s infinite;
-}
-@keyframes recBlink { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
 /* Editor de polaroid */
 .editor-overlay {
@@ -575,39 +553,46 @@ body::before {
   animation: polaroidIn 0.45s cubic-bezier(.22,1,.36,1) both;
   transition: transform 0.25s, box-shadow 0.25s;
   cursor: default;
+  overflow: visible;
+  z-index: 1;
 }
+.polaroid-card:hover { box-shadow: 0 14px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.25); z-index: 20; }
 .polaroid-delete {
-  position: absolute; top: -10px; right: -10px;
-  width: 26px; height: 26px; border-radius: 50%;
+  position: absolute; top: -12px; right: -12px;
+  width: 30px; height: 30px; border-radius: 50%;
   background: var(--rose); border: none;
-  color: #fff; font-size: 0.75rem; cursor: pointer;
+  color: #fff; font-size: 0.8rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 2px 8px rgba(192,54,106,0.6);
-  opacity: 0; transition: opacity 0.2s; z-index: 5;
+  opacity: 0; transition: opacity 0.2s; z-index: 10;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 .polaroid-bw {
-  position: absolute; top: -10px; right: 20px;
-  width: 26px; height: 26px; border-radius: 50%;
+  position: absolute; top: -12px; right: 22px;
+  width: 30px; height: 30px; border-radius: 50%;
   background: #444; border: none;
-  color: #fff; font-size: 0.85rem; cursor: pointer;
+  color: #fff; font-size: 0.9rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  opacity: 0; transition: opacity 0.2s; z-index: 5;
+  opacity: 0; transition: opacity 0.2s; z-index: 10;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.polaroid-card:hover { box-shadow: 0 14px 40px rgba(0,0,0,0.55), 0 2px 8px rgba(0,0,0,0.25); z-index: 10; }
-@keyframes polaroidIn {
-  from { opacity: 0; transform: scale(0.75) rotate(var(--pol-rot, 0deg)); }
-  to   { opacity: 1; transform: scale(1) rotate(var(--pol-rot, 0deg)); }
-}
-.polaroid-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; border-radius: 1px; background: #e0d0d8; }
-.polaroid-card img.bw,
-.polaroid-card video.bw,
-.polaroid-card div.bw { filter: grayscale(1); }
+.polaroid-delete:active { transform: scale(0.88); }
+.polaroid-bw:active     { transform: scale(0.88); }
 .polaroid-card:hover .polaroid-delete,
 .polaroid-card:hover .polaroid-bw { opacity: 1; }
 @media (hover: none) {
   .polaroid-delete, .polaroid-bw { opacity: 1; }
 }
+
+@keyframes polaroidIn {
+  from { opacity: 0; transform: scale(0.75) rotate(var(--pol-rot, 0deg)); }
+  to   { opacity: 1; transform: scale(1) rotate(var(--pol-rot, 0deg)); }
+}
+.polaroid-card img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; border-radius: 1px; background: #e0d0d8; }
+.polaroid-card img.bw { filter: grayscale(1); }
 .polaroid-empty { width: 100%; max-width: 400px; text-align: center; padding: 32px 20px; color: var(--text-soft); font-style: italic; font-size: 0.9rem; }
 .polaroid-empty-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
 
@@ -645,17 +630,12 @@ body::before {
   <div id="videoTimerWrap">Continúa en <span id="timerCount">5</span>s…</div>
 </div>
 
-<!-- CÁMARA OVERLAY -->
+<!-- CÁMARA OVERLAY (solo foto) -->
 <div class="camera-overlay" id="cameraOverlay">
   <video id="cameraVideo" autoplay playsinline muted></video>
   <div class="camera-ui">
-    <div class="camera-mode-toggle">
-      <button class="cam-mode-btn active" id="camModePhoto" onclick="setCameraMode('photo')">📷 Foto</button>
-      <button class="cam-mode-btn" id="camModeVideo" onclick="setCameraMode('video')">🎥 Vídeo 5s</button>
-    </div>
-    <div class="camera-hint" id="cameraHint">Toca el botón para hacer la foto 📸</div>
-    <button class="camera-shutter" id="cameraShutter" onclick="handleCameraShutter()">📷</button>
-    <div class="rec-indicator" id="recIndicator" style="display:none">⏺ Grabando… <span id="recTimer">5</span>s</div>
+    <div class="camera-hint">Toca el botón para hacer la foto 📸</div>
+    <button class="camera-shutter" id="cameraShutter" onclick="capturePhoto()">📷</button>
     <button class="camera-cancel-btn" onclick="closeCamera()">Cancelar</button>
   </div>
 </div>
@@ -670,9 +650,7 @@ body::before {
 
   <div class="editor-tools">
     <div class="editor-section-label">Añadir emoji · <span style="color:var(--rose-light);font-size:0.65rem">toca uno del canvas para eliminarlo</span></div>
-    <div class="emoji-picker-row" id="emojiPicker">
-      <!-- filled by JS -->
-    </div>
+    <div class="emoji-picker-row" id="emojiPicker"></div>
 
     <div class="editor-section-label">Pie de foto</div>
     <input type="text" class="caption-input-editor" id="editorCaption"
@@ -833,12 +811,12 @@ body::before {
   <div class="polaroid-upload-card">
     <div class="polaroid-upload-title">✨ Añadir una polaroid</div>
 
-    <!-- Selector de fuente -->
+    <!-- Selector de fuente — solo imagen -->
     <div class="img-source-selector">
       <div class="img-source-btn" id="galleryBtn">
         <span class="src-icon">🖼️</span>
         <span>Galería</span>
-        <input type="file" accept="image/*,video/*" onchange="onGallerySelect(event)">
+        <input type="file" accept="image/*" onchange="onGallerySelect(event)">
       </div>
       <div class="img-source-btn" onclick="openCamera()">
         <span class="src-icon">📸</span>
@@ -846,7 +824,7 @@ body::before {
       </div>
     </div>
 
-    <!-- Vista previa de imagen elegida -->
+    <!-- Vista previa -->
     <div class="preview-container" id="previewContainer">
       <img id="previewImg" alt="Vista previa">
       <button class="preview-remove" onclick="clearPreview()">✕</button>
@@ -1219,7 +1197,7 @@ function placePiece(piece, slot) {
 }
 
 /* =====================================================
-   POLAROID — ÁLBUM
+   POLAROID — ÁLBUM (solo fotos)
    ===================================================== */
 const POLAROID_KEY = 'bday_polaroids';
 let polaroids = [];
@@ -1236,16 +1214,10 @@ function loadPolaroidsFromStorage() {
   try { const raw = localStorage.getItem(POLAROID_KEY); return raw ? JSON.parse(raw) : []; } catch(e) { return []; }
 }
 function savePolaroidsToStorage() {
-  // Filter out session-only video entries (blob URLs can't be stored)
-  const forStorage = polaroids.map(p => {
-    if (p.video) return null; // skip video entries entirely — session only
-    return p;
-  }).filter(Boolean);
   try {
-    localStorage.setItem(POLAROID_KEY, JSON.stringify(forStorage));
+    localStorage.setItem(POLAROID_KEY, JSON.stringify(polaroids));
   } catch(e) {
-    // Storage full: try removing oldest entries until it fits
-    const trimmed = [...forStorage];
+    const trimmed = [...polaroids];
     while (trimmed.length > 0) {
       trimmed.pop();
       try { localStorage.setItem(POLAROID_KEY, JSON.stringify(trimmed)); return; } catch(e2) {}
@@ -1253,49 +1225,27 @@ function savePolaroidsToStorage() {
   }
 }
 
-/* --- Galería --- */
+/* --- Galería (solo imágenes) --- */
 function onGallerySelect(event) {
   const file = event.target.files[0];
   if (!file) return;
-  if (file.type.startsWith('video/')) {
-    const url = URL.createObjectURL(file);
-    setPreviewVideo(url);
-  } else {
-    const reader = new FileReader();
-    reader.onload = function(e) { setPreviewImage(e.target.result); };
-    reader.readAsDataURL(file);
-  }
+  const reader = new FileReader();
+  reader.onload = function(e) { setPreviewImage(e.target.result); };
+  reader.readAsDataURL(file);
 }
 
-/* --- Cámara frontal --- */
+/* --- Cámara frontal (solo foto) --- */
 let cameraStream = null;
-let cameraMode = 'photo'; // 'photo' | 'video'
-let mediaRecorder = null;
-let recordedChunks = [];
-
-function setCameraMode(mode) {
-  cameraMode = mode;
-  document.getElementById('camModePhoto').classList.toggle('active', mode === 'photo');
-  document.getElementById('camModeVideo').classList.toggle('active', mode === 'video');
-  document.getElementById('cameraHint').textContent = mode === 'photo'
-    ? 'Toca el botón para hacer la foto 📸'
-    : 'Toca para grabar 5 segundos 🎥';
-  document.getElementById('cameraShutter').textContent = mode === 'photo' ? '📷' : '🎥';
-}
-
-function handleCameraShutter() {
-  if (cameraMode === 'photo') capturePhoto();
-  else startVideoRecording();
-}
 
 function openCamera() {
   const overlay = document.getElementById('cameraOverlay');
   const video   = document.getElementById('cameraVideo');
   overlay.classList.add('show');
-  setCameraMode('photo');
 
-  // Resolución limitada: suficiente para una polaroid, sin sobrecargar el almacenamiento
-  const constraints = { video: { facingMode: { ideal: 'user' }, width: { ideal: 640 }, height: { ideal: 640 } }, audio: false };
+  const constraints = {
+    video: { facingMode: { ideal: 'user' }, width: { ideal: 640 }, height: { ideal: 640 } },
+    audio: false
+  };
 
   navigator.mediaDevices.getUserMedia(constraints)
     .then(stream => {
@@ -1310,17 +1260,14 @@ function openCamera() {
 }
 
 function capturePhoto() {
-  const video  = document.getElementById('cameraVideo');
-  // Capture at polaroid image area size: 368×368 (400px canvas minus 16px padding each side)
+  const video = document.getElementById('cameraVideo');
   const OUT = 368;
   const canvas = document.createElement('canvas');
   canvas.width  = OUT;
   canvas.height = OUT;
   const ctx = canvas.getContext('2d');
-  // Mirror horizontally (front camera)
   ctx.translate(OUT, 0);
   ctx.scale(-1, 1);
-  // Square crop from center of video
   const vw = video.videoWidth, vh = video.videoHeight;
   const side = Math.min(vw, vh);
   const ox = (vw - side) / 2;
@@ -1331,57 +1278,16 @@ function capturePhoto() {
   setPreviewImage(imgData);
 }
 
-function startVideoRecording() {
-  if (!cameraStream) return;
-  recordedChunks = [];
-  const shutter = document.getElementById('cameraShutter');
-  const recInd  = document.getElementById('recIndicator');
-  const recTimer = document.getElementById('recTimer');
-  shutter.disabled = true;
-  recInd.style.display = 'block';
-  let secs = 5;
-  recTimer.textContent = secs;
-  const countdown = setInterval(() => {
-    secs--;
-    recTimer.textContent = secs;
-    if (secs <= 0) clearInterval(countdown);
-  }, 1000);
-
-  const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9'
-    : MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
-  mediaRecorder = new MediaRecorder(cameraStream, { mimeType });
-  mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
-  mediaRecorder.onstop = () => {
-    clearInterval(countdown);
-    recInd.style.display = 'none';
-    shutter.disabled = false;
-    const blob = new Blob(recordedChunks, { type: mimeType });
-    const url  = URL.createObjectURL(blob);
-    closeCamera();
-    setPreviewVideo(url);
-  };
-  mediaRecorder.start();
-  setTimeout(() => { if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop(); }, 5000);
-}
-
 function closeCamera() {
-  if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
-  mediaRecorder = null;
   if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
   document.getElementById('cameraVideo').srcObject = null;
   document.getElementById('cameraOverlay').classList.remove('show');
-  document.getElementById('recIndicator').style.display = 'none';
-  document.getElementById('cameraShutter').disabled = false;
 }
 
-let pendingVideoUrl = null;
-
 function setPreviewImage(base64) {
-  pendingVideoUrl = null;
-  // Resize to polaroid working size before storing
   const tmpImg = new Image();
   tmpImg.onload = function() {
-    const MAX = 800; // max dimension — plenty for a 400px polaroid
+    const MAX = 800;
     let w = tmpImg.width, h = tmpImg.height;
     if (w > MAX || h > MAX) {
       const ratio = Math.min(MAX / w, MAX / h);
@@ -1394,8 +1300,6 @@ function setPreviewImage(base64) {
     pendingImageBase64 = rc.toDataURL('image/jpeg', 0.80);
     const container = document.getElementById('previewContainer');
     const img = document.getElementById('previewImg');
-    let prevVid = document.getElementById('previewVid');
-    if (prevVid) prevVid.style.display = 'none';
     img.src = pendingImageBase64;
     img.style.display = 'block';
     container.style.display = 'block';
@@ -1404,45 +1308,12 @@ function setPreviewImage(base64) {
   tmpImg.src = base64;
 }
 
-function setPreviewVideo(url) {
-  pendingImageBase64 = null;
-  pendingVideoUrl = url;
-  const container = document.getElementById('previewContainer');
-  const img = document.getElementById('previewImg');
-  img.style.display = 'none';
-  let prevVid = document.getElementById('previewVid');
-  if (!prevVid) {
-    prevVid = document.createElement('video');
-    prevVid.id = 'previewVid';
-    prevVid.muted = true;
-    prevVid.loop = true;
-    prevVid.autoplay = true;
-    prevVid.playsInline = true;
-    prevVid.setAttribute('playsinline', '');
-    prevVid.style.cssText = 'width:100%;max-height:260px;object-fit:cover;display:block;';
-    container.insertBefore(prevVid, img);
-  }
-  prevVid.src = url;
-  prevVid.style.display = 'block';
-  container.style.display = 'block';
-  const editBtn = document.getElementById('editBtn');
-  editBtn.disabled = false;
-  editBtn.textContent = '✏️ \u00a0 Personalizar y añadir';
-  editBtn.onclick = function() { openEditor(); };
-}
-
 function clearPreview() {
   pendingImageBase64 = null;
-  pendingVideoUrl = null;
   document.getElementById('previewContainer').style.display = 'none';
   document.getElementById('previewImg').src = '';
   document.getElementById('previewImg').style.display = 'block';
-  const prevVid = document.getElementById('previewVid');
-  if (prevVid) { prevVid.src = ''; prevVid.style.display = 'none'; }
   document.getElementById('editBtn').disabled = true;
-  document.getElementById('editBtn').textContent = '✏️ \u00a0 Personalizar y añadir';
-  document.getElementById('editBtn').onclick = function(){ openEditor(); };
-  // Reset file input
   const fi = document.querySelector('#screen-polaroid input[type="file"]');
   if (fi) fi.value = '';
 }
@@ -1456,45 +1327,22 @@ const EMOJIS_EDITOR_CATS = [
   { label: '✨ Magia', emojis: ['✨','🌟','💫','⚡','🔥','🌠'] },
 ];
 const TEXT_COLORS = [
-  '#ffffff', // blanco
-  '#ffe0f0', // rosa muy claro
-  '#d4a853', // dorado
-  '#ffb6c1', // rosa claro
-  '#c0366a', // rosa oscuro
-  '#000000', // negro
-  '#7b2d8b', // púrpura
-  '#4a90d9', // azul
-
-  // nuevos
-  '#ffd1dc', // rosa pastel
-  '#f7c59f', // melocotón suave
-  '#f2d16b', // amarillo dorado claro
-  '#b8e0d2', // verde menta suave
-  '#a8c3f2', // azul claro
-  '#cdb4db', // lavanda
-  '#ffc8a2', // naranja suave
-  '#e5989b', // rosa salmón
-  '#6d597a', // púrpura grisáceo
-  '#355070', // azul oscuro elegante
-  '#588157', // verde oliva suave
-  '#bc6c25'  // marrón cálido
+  '#ffffff','#ffe0f0','#d4a853','#ffb6c1','#c0366a','#000000','#7b2d8b','#4a90d9',
+  '#ffd1dc','#f7c59f','#f2d16b','#b8e0d2','#a8c3f2','#cdb4db','#ffc8a2','#e5989b',
+  '#6d597a','#355070','#588157','#bc6c25'
 ];
-let editorEmojis   = []; // [{emoji, x, y, size}]
-let draggingEmoji  = null;
-let selectedColor  = '#ffffff';
-let editorImg      = null;
-
-let editorIsVideo = false;
-let editorVideoEl = null;
+let editorEmojis  = [];
+let draggingEmoji = null;
+let selectedColor = '#ffffff';
+let editorImg     = null;
 
 function openEditor() {
-  if (!pendingImageBase64 && !pendingVideoUrl) return;
+  if (!pendingImageBase64) return;
   document.getElementById('editorCaption').value = '';
   editorEmojis = [];
   selectedColor = '#ffffff';
-  editorIsVideo = !!pendingVideoUrl;
 
-  // Build emoji picker with categories
+  // Emoji picker
   const row = document.getElementById('emojiPicker');
   row.innerHTML = '';
   EMOJIS_EDITOR_CATS.forEach(cat => {
@@ -1514,7 +1362,7 @@ function openEditor() {
     row.appendChild(catRow);
   });
 
-  // Build color row
+  // Color row
   const cr = document.getElementById('colorRow');
   cr.innerHTML = '';
   TEXT_COLORS.forEach(c => {
@@ -1531,36 +1379,12 @@ function openEditor() {
     cr.appendChild(sw);
   });
 
-  if (editorIsVideo) {
-    // Use a hidden video element to draw frames on the canvas
-    editorVideoEl = document.createElement('video');
-    editorVideoEl.src = pendingVideoUrl;
-    editorVideoEl.muted = true;
-    editorVideoEl.playsInline = true;
-    editorVideoEl.setAttribute('playsinline', '');
-    editorVideoEl.loop = true;
-    editorVideoEl.onloadeddata = () => {
-      editorVideoEl.play();
-      renderEditorCanvas();
-      let rafId;
-      function liveFrame() {
-        if (!editorIsVideo || !document.getElementById('editorOverlay').classList.contains('show')) return;
-        renderEditorCanvas();
-        rafId = requestAnimationFrame(liveFrame);
-      }
-      rafId = requestAnimationFrame(liveFrame);
-    };
-    editorImg = null;
-  } else {
-    editorVideoEl = null;
-    editorImg = new Image();
-    editorImg.onload = () => renderEditorCanvas();
-    editorImg.src = pendingImageBase64;
-  }
+  editorImg = new Image();
+  editorImg.onload = () => renderEditorCanvas();
+  editorImg.src = pendingImageBase64;
 
   document.getElementById('editorOverlay').classList.add('show');
 
-  // Touch drag for emojis on canvas
   const canvas = document.getElementById('editorCanvas');
   canvas.addEventListener('touchstart', onEmojiTouchStart, {passive:false});
   canvas.addEventListener('touchmove',  onEmojiTouchMove,  {passive:false});
@@ -1571,8 +1395,6 @@ function openEditor() {
 }
 
 function closeEditor() {
-  if (editorVideoEl) { editorVideoEl.pause(); editorVideoEl.src = ''; editorVideoEl = null; }
-  editorIsVideo = false;
   document.getElementById('editorOverlay').classList.remove('show');
   const canvas = document.getElementById('editorCanvas');
   canvas.removeEventListener('touchstart', onEmojiTouchStart);
@@ -1588,32 +1410,23 @@ function renderEditorCanvas() {
   const ctx    = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
-
-  // Fondo blanco (marco polaroid)
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
 
-  // Imagen o frame de vídeo
   const imgPad = 16;
   const imgSize = W - imgPad * 2;
-  const source = editorIsVideo ? editorVideoEl : editorImg;
-  if (source && (editorIsVideo ? source.readyState >= 2 : source.complete)) {
-    const sw = editorIsVideo ? source.videoWidth  : source.naturalWidth;
-    const sh = editorIsVideo ? source.videoHeight : source.naturalHeight;
+  if (editorImg && editorImg.complete) {
+    const sw = editorImg.naturalWidth, sh = editorImg.naturalHeight;
     ctx.save();
     ctx.beginPath();
     ctx.rect(imgPad, imgPad, imgSize, imgSize);
     ctx.clip();
     const ratio = Math.min(imgSize / sw, imgSize / sh);
-    const dw = sw * ratio;
-    const dh = sh * ratio;
-    const dx = imgPad + (imgSize - dw) / 2;
-    const dy = imgPad + (imgSize - dh) / 2;
-    ctx.drawImage(source, dx, dy, dw, dh);
+    const dw = sw * ratio, dh = sh * ratio;
+    ctx.drawImage(editorImg, imgPad + (imgSize - dw) / 2, imgPad + (imgSize - dh) / 2, dw, dh);
     ctx.restore();
   }
 
-  // Emojis sobre la imagen
   editorEmojis.forEach(em => {
     ctx.font = `${em.size}px serif`;
     ctx.textAlign = 'center';
@@ -1621,10 +1434,9 @@ function renderEditorCanvas() {
     ctx.fillText(em.emoji, em.x, em.y);
   });
 
-  // Texto del pie
   const caption = document.getElementById('editorCaption')?.value?.trim() || '';
   if (caption) {
-    ctx.font = `italic 22px "Lora", serif`;
+    ctx.font = `italic 27px "Lora", serif`;
     ctx.fillStyle = selectedColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -1638,7 +1450,6 @@ function addEmojiToCanvas(emoji) {
   renderEditorCanvas();
 }
 
-// Drag emojis on canvas
 function getCanvasPos(canvas, clientX, clientY) {
   const rect  = canvas.getBoundingClientRect();
   const scaleX = canvas.width  / rect.width;
@@ -1715,99 +1526,41 @@ function saveFromEditor() {
   const editorCanvas = document.getElementById('editorCanvas');
   const caption = document.getElementById('editorCaption').value.trim() || '❤️';
 
-  if (editorIsVideo) {
-    // Stop the live loop first by removing the show class temporarily won't work
-    // Instead: pause video, do ONE final render, export, then close
-    const vid = editorVideoEl;
-    if (vid) vid.pause();
-
-    // Render final frame with overlays
-    const ctx = editorCanvas.getContext('2d');
-    const W = editorCanvas.width, H = editorCanvas.height;
-    ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, W, H);
-    const imgPad = 16, imgSize = W - imgPad * 2;
-    if (vid && vid.readyState >= 2) {
-      const sw = vid.videoWidth, sh = vid.videoHeight;
-      ctx.save();
-      ctx.beginPath(); ctx.rect(imgPad, imgPad, imgSize, imgSize); ctx.clip();
-      const ratio = Math.min(imgSize / sw, imgSize / sh);
-      const dw = sw * ratio, dh = sh * ratio;
-      ctx.drawImage(vid, imgPad + (imgSize - dw) / 2, imgPad + (imgSize - dh) / 2, dw, dh);
-      ctx.restore();
-    }
-    editorEmojis.forEach(em => {
-      ctx.font = `${em.size}px serif`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(em.emoji, em.x, em.y);
-    });
-    if (caption) {
-      ctx.font = `italic 22px "Lora", serif`;
-      ctx.fillStyle = selectedColor;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
-      ctx.fillText(caption.length > 28 ? caption.slice(0, 28) + '…' : caption, W / 2, ty);
-    }
-
-    const overlaySnap = editorCanvas.toDataURL('image/jpeg', 0.75);
-    const pol = { id: Date.now(), video: pendingVideoUrl, overlay: overlaySnap, text: caption };
-
-    // Close editor BEFORE modifying polaroids array to avoid liveFrame interference
-    editorIsVideo = false;
-    if (editorVideoEl) { editorVideoEl.pause(); editorVideoEl.src = ''; editorVideoEl = null; }
-    document.getElementById('editorOverlay').classList.remove('show');
-    const cvs = document.getElementById('editorCanvas');
-    cvs.removeEventListener('touchstart', onEmojiTouchStart);
-    cvs.removeEventListener('touchmove',  onEmojiTouchMove);
-    cvs.removeEventListener('touchend',   onEmojiTouchEnd);
-    cvs.removeEventListener('mousedown',  onEmojiMouseDown);
-    cvs.removeEventListener('mousemove',  onEmojiMouseMove);
-    cvs.removeEventListener('mouseup',    onEmojiMouseUp);
-
-    polaroids.unshift(pol);
-    savePolaroidsToStorage();
-    renderPolaroidGrid();
-    clearPreview();
-
-  } else {
-    // For photos: do a clean render then export
-    const ctx = editorCanvas.getContext('2d');
-    const W = editorCanvas.width, H = editorCanvas.height;
-    ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, W, H);
-    const imgPad = 16, imgSize = W - imgPad * 2;
-    if (editorImg && editorImg.complete) {
-      ctx.save();
-      ctx.beginPath(); ctx.rect(imgPad, imgPad, imgSize, imgSize); ctx.clip();
-      const ratio = Math.min(imgSize / editorImg.naturalWidth, imgSize / editorImg.naturalHeight);
-      const dw = editorImg.naturalWidth * ratio, dh = editorImg.naturalHeight * ratio;
-      ctx.drawImage(editorImg, imgPad + (imgSize - dw) / 2, imgPad + (imgSize - dh) / 2, dw, dh);
-      ctx.restore();
-    }
-    editorEmojis.forEach(em => {
-      ctx.font = `${em.size}px serif`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(em.emoji, em.x, em.y);
-    });
-    if (caption) {
-      ctx.font = `italic 22px "Lora", serif`;
-      ctx.fillStyle = selectedColor;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
-      ctx.fillText(caption.length > 28 ? caption.slice(0, 28) + '…' : caption, W / 2, ty);
-    }
-
-    const finalImg = editorCanvas.toDataURL('image/jpeg', 0.75);
-    const pol = { id: Date.now(), image: finalImg, text: caption };
-
-    closeEditor();
-    polaroids.unshift(pol);
-    savePolaroidsToStorage();
-    renderPolaroidGrid();
-    clearPreview();
+  const ctx = editorCanvas.getContext('2d');
+  const W = editorCanvas.width, H = editorCanvas.height;
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, W, H);
+  const imgPad = 16, imgSize = W - imgPad * 2;
+  if (editorImg && editorImg.complete) {
+    ctx.save();
+    ctx.beginPath(); ctx.rect(imgPad, imgPad, imgSize, imgSize); ctx.clip();
+    const ratio = Math.min(imgSize / editorImg.naturalWidth, imgSize / editorImg.naturalHeight);
+    const dw = editorImg.naturalWidth * ratio, dh = editorImg.naturalHeight * ratio;
+    ctx.drawImage(editorImg, imgPad + (imgSize - dw) / 2, imgPad + (imgSize - dh) / 2, dw, dh);
+    ctx.restore();
   }
+  editorEmojis.forEach(em => {
+    ctx.font = `${em.size}px serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(em.emoji, em.x, em.y);
+  });
+  if (caption) {
+    ctx.font = `italic 27px "Lora", serif`;
+    ctx.fillStyle = selectedColor;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
+    ctx.fillText(caption.length > 28 ? caption.slice(0, 28) + '…' : caption, W / 2, ty);
+  }
+
+  const finalImg = editorCanvas.toDataURL('image/jpeg', 0.75);
+  const pol = { id: Date.now(), image: finalImg, text: caption };
+
+  closeEditor();
+  polaroids.unshift(pol);
+  savePolaroidsToStorage();
+  renderPolaroidGrid();
+  clearPreview();
 }
 
 function deletePolaroid(id) {
@@ -1839,6 +1592,7 @@ function renderPolaroidGrid() {
     card.style.transform = `rotate(${rot}deg)`;
 
     const polId = pol.id;
+
     const delBtn = document.createElement('button');
     delBtn.className = 'polaroid-delete';
     delBtn.textContent = '✕';
@@ -1853,42 +1607,9 @@ function renderPolaroidGrid() {
     bwBtn.title = 'Filtro blanco y negro';
     bwBtn.textContent = '◑';
 
-    let media;
-    if (pol.video) {
-      const videoWrap = document.createElement('div');
-      videoWrap.style.cssText = 'position:relative;width:100%;aspect-ratio:1/1;';
-      media = document.createElement('video');
-      media.src = pol.video;
-      media.muted = true;
-      media.loop = true;
-      media.playsInline = true;
-      media.setAttribute('playsinline', '');
-      media.setAttribute('muted', '');
-      media.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;border-radius:1px;';
-      videoWrap.appendChild(media);
-      if (pol.overlay) {
-        const ov = document.createElement('img');
-        ov.src = pol.overlay;
-        ov.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;border-radius:1px;';
-        videoWrap.appendChild(ov);
-      }
-      bwBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const isOn = videoWrap.classList.toggle('bw');
-        bwBtn.style.background = isOn ? '#222' : '#444';
-      });
-      card.appendChild(delBtn);
-      card.appendChild(bwBtn);
-      card.appendChild(videoWrap);
-      grid.appendChild(card);
-      // Force play after DOM insertion — required for iOS Safari
-      setTimeout(() => { media.play().catch(() => {}); }, 50);
-      return;
-    } else {
-      media = document.createElement('img');
-      media.src = pol.image;
-      media.alt = pol.text || '';
-    }
+    const media = document.createElement('img');
+    media.src = pol.image;
+    media.alt = pol.text || '';
 
     bwBtn.addEventListener('click', function(e) {
       e.stopPropagation();
