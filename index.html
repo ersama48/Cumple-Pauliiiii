@@ -1628,7 +1628,7 @@ function renderEditorCanvas() {
 
   const caption = document.getElementById('editorCaption')?.value?.trim() || '';
   if (caption) {
-    ctx.font = `italic 27px "Lora", serif`;
+    ctx.font = `italic 33px "Lora", serif`;
     ctx.fillStyle = selectedColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -1738,7 +1738,7 @@ function saveFromEditor() {
     ctx.fillText(em.emoji, em.x, em.y);
   });
   if (caption) {
-    ctx.font = `italic 27px "Lora", serif`;
+    ctx.font = `italic 33px "Lora", serif`;
     ctx.fillStyle = selectedColor;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
