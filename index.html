@@ -695,7 +695,7 @@ body::before {
 <button id="musicBtn" onclick="activateMusic()">🎵 Activar música</button>
 
 <!-- Unlock toast -->
-<div id="unlockToast">🔒 Toca "Pauli" 3 veces para desbloquear la carta…</div>
+<div id="unlockToast">🔓 ¡Carta desbloqueada! ✨</div>
 
 <!-- VIDEO MODAL -->
 <div id="videoModal">
@@ -722,7 +722,7 @@ body::before {
   <div class="editor-title">✨ Personaliza tu polaroid</div>
 
   <div class="editor-canvas-wrap">
-    <canvas id="editorCanvas" width="400" height="480"></canvas>
+    <canvas id="editorCanvas" width="400" height="520"></canvas>
   </div>
 
   <div class="editor-tools">
@@ -1011,11 +1011,6 @@ function handlePauliTap(e) {
   el.classList.remove('pauli-tap');
   void el.offsetWidth; // reflow
   el.classList.add('pauli-tap');
-
-  // Mostrar toast con conteo
-  if (pauliTaps < PAULI_TAPS_NEEDED) {
-    showToast(`🔒 ${PAULI_TAPS_NEEDED - pauliTaps} tap${PAULI_TAPS_NEEDED - pauliTaps === 1 ? '' : 's'} más para desbloquear…`);
-  }
 
   // Reinicia el contador si pasan más de 1.5s sin nuevo tap
   clearTimeout(pauliTimer);
@@ -1386,7 +1381,6 @@ function savePolaroidsToStorage() {
 function onGallerySelect(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
-  // Validar que es imagen
   if (!file.type.startsWith('image/')) {
     alert('Por favor selecciona una imagen 📷');
     return;
@@ -1395,16 +1389,14 @@ function onGallerySelect(event) {
   reader.onload = function(e) { setPreviewImage(e.target.result); };
   reader.onerror = function() { alert('No se pudo leer el archivo. Inténtalo de nuevo.'); };
   reader.readAsDataURL(file);
-  // Reset input value so same file can be reselected
   event.target.value = '';
 }
 
 /* ---- Cámara en tiempo real ---- */
 let cameraStream = null;
-let currentFacingMode = 'user'; // frontal por defecto
+let currentFacingMode = 'user';
 
 function openCamera() {
-  // Comprobar compatibilidad
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     showCameraError('Tu navegador no admite acceso directo a la cámara. Usa el botón "Tomar foto" de arriba.');
     return;
@@ -1424,7 +1416,6 @@ function startCameraStream(facingMode) {
   const video = document.getElementById('cameraVideo');
   const errorEl = document.getElementById('cameraError');
 
-  // Detener stream anterior
   if (cameraStream) {
     cameraStream.getTracks().forEach(t => t.stop());
     cameraStream = null;
@@ -1458,7 +1449,6 @@ function startCameraStream(facingMode) {
       } else if (err.name === 'NotReadableError') {
         msg = '📷 La cámara está siendo usada por otra aplicación.';
       } else if (err.name === 'OverconstrainedError') {
-        // Intentar sin restricciones de facingMode
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
           .then(stream => {
             cameraStream = stream;
@@ -1500,7 +1490,6 @@ function capturePhoto() {
   canvas.height = OUT;
   const ctx = canvas.getContext('2d');
 
-  // Espejo solo para cámara frontal
   if (currentFacingMode === 'user') {
     ctx.translate(OUT, 0);
     ctx.scale(-1, 1);
@@ -1547,7 +1536,6 @@ function setPreviewImage(base64) {
     img.style.display = 'block';
     container.style.display = 'block';
     document.getElementById('editBtn').disabled = false;
-    // Hacer scroll hacia la preview
     container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
   tmpImg.onerror = function() { alert('No se pudo cargar la imagen. Prueba con otra.'); };
@@ -1561,7 +1549,6 @@ function clearPreview() {
   img.src = '';
   img.style.display = 'block';
   document.getElementById('editBtn').disabled = true;
-  // Reset file input
   const galleryInput = document.getElementById('galleryInput');
   if (galleryInput) galleryInput.value = '';
 }
@@ -1581,16 +1568,15 @@ const TEXT_COLORS = [
 ];
 let editorEmojis  = [];
 let draggingEmoji = null;
-let selectedColor = '#ffffff';
+let selectedColor = '#000000';
 let editorImg     = null;
 
 function openEditor() {
   if (!pendingImageBase64) return;
   document.getElementById('editorCaption').value = '';
   editorEmojis = [];
-  selectedColor = '#ffffff';
+  selectedColor = '#000000';
 
-  // Emoji picker
   const row = document.getElementById('emojiPicker');
   row.innerHTML = '';
   EMOJIS_EDITOR_CATS.forEach(cat => {
@@ -1610,7 +1596,6 @@ function openEditor() {
     row.appendChild(catRow);
   });
 
-  // Color row
   const cr = document.getElementById('colorRow');
   cr.innerHTML = '';
   TEXT_COLORS.forEach(c => {
@@ -1658,11 +1643,13 @@ function renderEditorCanvas() {
   const ctx    = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, W, H);
 
   const imgPad = 16;
-  const imgSize = W - imgPad * 2;
+  const captionArea = 90; // espacio reservado para el pie de foto
+  const imgSize = W - imgPad * 2 - captionArea; // imagen cuadrada que deja espacio abajo
+
   if (editorImg && editorImg.complete) {
     const sw = editorImg.naturalWidth, sh = editorImg.naturalHeight;
     ctx.save();
@@ -1684,11 +1671,11 @@ function renderEditorCanvas() {
 
   const caption = document.getElementById('editorCaption')?.value?.trim() || '';
   if (caption) {
-    ctx.font = `italic 27px "Lora", serif`;
+    ctx.font = `italic 26px "Lora", serif`;
     ctx.fillStyle = selectedColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
+    const ty = imgPad + imgSize + captionArea / 2;
     ctx.fillText(caption.length > 28 ? caption.slice(0,28)+'…' : caption, W/2, ty);
   }
 }
@@ -1777,9 +1764,9 @@ function saveFromEditor() {
   const ctx = editorCanvas.getContext('2d');
   const W = editorCanvas.width, H = editorCanvas.height;
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#000000';
   ctx.fillRect(0, 0, W, H);
-  const imgPad = 16, imgSize = W - imgPad * 2;
+  const imgPad = 16, captionArea = 90, imgSize = W - imgPad * 2 - captionArea;
   if (editorImg && editorImg.complete) {
     ctx.save();
     ctx.beginPath(); ctx.rect(imgPad, imgPad, imgSize, imgSize); ctx.clip();
@@ -1794,10 +1781,10 @@ function saveFromEditor() {
     ctx.fillText(em.emoji, em.x, em.y);
   });
   if (caption) {
-    ctx.font = `italic 27px "Lora", serif`;
+    ctx.font = `italic 26px "Lora", serif`;
     ctx.fillStyle = selectedColor;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
+    const ty = imgPad + imgSize + captionArea / 2;
     ctx.fillText(caption.length > 28 ? caption.slice(0, 28) + '…' : caption, W / 2, ty);
   }
 
