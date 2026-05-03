@@ -106,7 +106,6 @@ body::before {
 }
 .greeting-sub { font-size: 0.78rem; color: var(--rose-light); letter-spacing: 4px; text-transform: uppercase; font-style: italic; }
 
-/* ---- PAULI unlock hint ---- */
 .pauli-hint {
   font-size: 0.72rem; color: var(--text-soft);
   font-style: italic; text-align: center;
@@ -119,7 +118,6 @@ body::before {
   -webkit-user-select: none;
 }
 
-/* Pauli tap ripple */
 @keyframes pauliFlash {
   0%   { transform: scale(1); }
   40%  { transform: scale(1.18); color: var(--gold); }
@@ -356,9 +354,6 @@ body::before {
 .invite-detail { color: var(--text-soft); line-height: 1.9; font-style: italic; }
 .invite-detail strong { color: var(--cream); font-style: normal; }
 
-/* ===================================================
-   POLAROID SCREEN
-   =================================================== */
 .polaroid-header { text-align: center; padding: 28px 0 10px; width: 100%; }
 .polaroid-header-title {
   font-family: 'Playfair Display', serif;
@@ -382,7 +377,6 @@ body::before {
 }
 .polaroid-upload-title { font-family: 'Playfair Display', serif; color: var(--gold); font-style: italic; font-size: 1.1rem; margin-bottom: 16px; text-align: center; }
 
-/* Selector de fuente de imagen */
 .img-source-selector {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 10px; margin-bottom: 14px;
@@ -404,14 +398,12 @@ body::before {
   background: rgba(212,168,83,0.1);
 }
 .img-source-btn .src-icon { font-size: 1.8rem; }
-/* Hidden file input overlay */
 .img-source-btn input[type="file"] {
   position: absolute; inset: 0; opacity: 0; cursor: pointer;
-  font-size: 100px; /* force large hit area */
+  font-size: 100px;
   width: 100%; height: 100%;
 }
 
-/* Vista previa de imagen seleccionada */
 .preview-container {
   width: 100%; position: relative;
   border-radius: 14px; overflow: hidden;
@@ -430,7 +422,6 @@ body::before {
   display: flex; align-items: center; justify-content: center;
 }
 
-/* Visor de cámara */
 .camera-overlay {
   display: none; position: fixed; inset: 0; z-index: 9000;
   background: #000; flex-direction: column;
@@ -452,7 +443,6 @@ body::before {
   font-size: 0.88rem; font-family: 'Lora', serif;
   font-style: italic; text-align: center;
 }
-/* Error message inside camera overlay */
 .camera-error {
   color: var(--rose-light);
   font-size: 0.85rem;
@@ -482,14 +472,12 @@ body::before {
   font-size: 0.85rem; cursor: pointer;
 }
 
-/* Switch camera button */
 .camera-switch-btn {
   background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
   color: #fff; padding: 8px 16px; border-radius: 10px;
   font-family: 'Lora', serif; font-size: 0.8rem; cursor: pointer;
 }
 
-/* Editor de polaroid */
 .editor-overlay {
   display: none; position: fixed; inset: 0; z-index: 9100;
   background: rgba(0,0,0,0.93);
@@ -503,7 +491,6 @@ body::before {
   font-size: 1.2rem; margin-bottom: 16px; text-align: center;
 }
 
-/* Canvas de edición */
 .editor-canvas-wrap {
   width: 100%; max-width: 340px;
   position: relative; margin-bottom: 16px;
@@ -514,7 +501,6 @@ body::before {
   box-shadow: 0 6px 32px rgba(0,0,0,0.6);
 }
 
-/* Herramientas de edición */
 .editor-tools {
   width: 100%; max-width: 340px;
   display: flex; flex-direction: column; gap: 12px;
@@ -584,7 +570,6 @@ body::before {
   box-shadow: 0 3px 16px rgba(192,54,106,0.4);
 }
 
-/* Grid de polaroids */
 .polaroid-grid {
   width: 100%; max-width: 440px;
   display: flex; flex-wrap: wrap; gap: 16px;
@@ -656,7 +641,6 @@ body::before {
 }
 .btn-back:active { background: rgba(255,255,255,0.06); }
 
-/* Secret unlock toast */
 #unlockToast {
   position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(20px);
   background: linear-gradient(135deg, var(--rose-deep), var(--rose));
@@ -677,7 +661,6 @@ body::before {
 .attempts-line { text-align: center; color: var(--text-soft); font-size: 0.84rem; margin-bottom: 10px; }
 .attempts-line span { color: var(--rose-light); font-weight: 600; }
 
-/* ---- Responsive tweaks ---- */
 @media (max-width: 380px) {
   .polaroid-card { width: 138px; }
   .carousel { max-width: 100%; }
@@ -694,7 +677,6 @@ body::before {
 
 <button id="musicBtn" onclick="activateMusic()">🎵 Activar música</button>
 
-<!-- Unlock toast -->
 <div id="unlockToast">🔓 ¡Carta desbloqueada! ✨</div>
 
 <!-- VIDEO MODAL -->
@@ -722,7 +704,7 @@ body::before {
   <div class="editor-title">✨ Personaliza tu polaroid</div>
 
   <div class="editor-canvas-wrap">
-    <canvas id="editorCanvas" width="400" height="520"></canvas>
+    <canvas id="editorCanvas" width="400" height="480"></canvas>
   </div>
 
   <div class="editor-tools">
@@ -744,9 +726,7 @@ body::before {
   </div>
 </div>
 
-<!-- ================================================
-     PANTALLA 0 — ÁLBUM PRINCIPAL (primera pantalla)
-     ================================================ -->
+<!-- PANTALLA 0 -->
 <div id="screen-greeting" class="screen">
   <div class="greeting-top">
     <h1 class="greeting-title">Feliz Cumpleaños mi amor ❤️</h1>
@@ -789,7 +769,6 @@ body::before {
 
   <div class="divider"></div>
 
-  <!-- Carta oculta — solo visible tras 3 taps en "Pauli" -->
   <div id="secretLetter" style="display:none; width:100%; max-width:400px;">
     <div class="love-letter">
       <div class="letter-head">Mi amor,</div>
@@ -896,9 +875,7 @@ body::before {
   <div class="polaroid-upload-card">
     <div class="polaroid-upload-title">✨ Añadir una polaroid</div>
 
-    <!-- Selector de fuente -->
     <div class="img-source-selector">
-      <!-- Galería: input file real dentro del botón -->
       <div class="img-source-btn" id="galleryBtn">
         <span class="src-icon">🖼️</span>
         <span>Galería / Archivo</span>
@@ -909,14 +886,12 @@ body::before {
           onchange="onGallerySelect(event)"
         >
       </div>
-      <!-- Cámara frontal: abre visor en tiempo real -->
       <div class="img-source-btn" id="cameraBtn" onclick="openCamera()">
         <span class="src-icon">📸</span>
         <span>Cámara frontal</span>
       </div>
     </div>
 
-<!-- Vista previa -->
     <div class="preview-container" id="previewContainer">
       <img id="previewImg" alt="Vista previa">
       <button class="preview-remove" onclick="clearPreview()">✕</button>
@@ -995,6 +970,7 @@ const TOTAL_SLIDES = 5;
 
 /* =====================================================
    PAULI SECRET TAP — 3 taps desbloquean la carta
+   Solo animación visual, sin toast de conteo
    ===================================================== */
 let pauliTaps = 0;
 let pauliTimer = null;
@@ -1025,12 +1001,10 @@ function handlePauliTap(e) {
 
 function unlockSecret() {
   if (document.getElementById('secretLetter').style.display !== 'none') {
-    // Ya desbloqueado — ir directamente a la pantalla de la carta
     showScreen('screen-greeting');
     resetCarTimer();
     return;
   }
-  // Primera vez: desbloquear carta y navegar
   document.getElementById('secretLetter').style.display = 'block';
   showToast('🔓 ¡Carta desbloqueada! ✨');
   startConfetti();
@@ -1165,7 +1139,6 @@ function completeGame(idx) {
 function unlockFinal() {
   showScreen('screen-final');
   startConfetti();
-  // Mostrar botón álbum en carta secreta
   document.getElementById('greetingAlbumBtn').style.display = 'block';
   const fv = document.getElementById('finalVideo');
   if (fv) fv.play().catch(() => {});
@@ -1377,7 +1350,6 @@ function savePolaroidsToStorage() {
   }
 }
 
-/* ---- Galería / File input (funciona en móvil y escritorio) ---- */
 function onGallerySelect(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
@@ -1392,7 +1364,6 @@ function onGallerySelect(event) {
   event.target.value = '';
 }
 
-/* ---- Cámara en tiempo real ---- */
 let cameraStream = null;
 let currentFacingMode = 'user';
 
@@ -1401,36 +1372,27 @@ function openCamera() {
     showCameraError('Tu navegador no admite acceso directo a la cámara. Usa el botón "Tomar foto" de arriba.');
     return;
   }
-
   const overlay = document.getElementById('cameraOverlay');
   const video   = document.getElementById('cameraVideo');
   const errorEl = document.getElementById('cameraError');
   errorEl.style.display = 'none';
   overlay.classList.add('show');
   document.getElementById('cameraShutter').style.display = '';
-
   startCameraStream(currentFacingMode);
 }
 
 function startCameraStream(facingMode) {
   const video = document.getElementById('cameraVideo');
   const errorEl = document.getElementById('cameraError');
-
   if (cameraStream) {
     cameraStream.getTracks().forEach(t => t.stop());
     cameraStream = null;
   }
   video.srcObject = null;
-
   const constraints = {
-    video: {
-      facingMode: { ideal: facingMode },
-      width:  { ideal: 1280 },
-      height: { ideal: 720 }
-    },
+    video: { facingMode: { ideal: facingMode }, width: { ideal: 1280 }, height: { ideal: 720 } },
     audio: false
   };
-
   navigator.mediaDevices.getUserMedia(constraints)
     .then(stream => {
       cameraStream = stream;
@@ -1440,7 +1402,6 @@ function startCameraStream(facingMode) {
       video.play().catch(() => {});
     })
     .catch(err => {
-      console.error('Camera error:', err.name, err.message);
       let msg = 'No se pudo acceder a la cámara.';
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
         msg = '⛔ Permiso de cámara denegado. Ve a los ajustes de tu navegador y permite el acceso.';
@@ -1489,18 +1450,15 @@ function capturePhoto() {
   canvas.width  = OUT;
   canvas.height = OUT;
   const ctx = canvas.getContext('2d');
-
   if (currentFacingMode === 'user') {
     ctx.translate(OUT, 0);
     ctx.scale(-1, 1);
   }
-
   const vw = video.videoWidth, vh = video.videoHeight;
   const side = Math.min(vw, vh);
   const ox = (vw - side) / 2;
   const oy = (vh - side) / 2;
   ctx.drawImage(video, ox, oy, side, side, 0, 0, OUT, OUT);
-
   const imgData = canvas.toDataURL('image/jpeg', 0.82);
   closeCamera();
   setPreviewImage(imgData);
@@ -1562,12 +1520,13 @@ const EMOJIS_EDITOR_CATS = [
   { label: '✨ Magia', emojis: ['✨','🌟','💫','⚡','🔥','🌠'] },
 ];
 const TEXT_COLORS = [
-  '#ffffff','#ffe0f0','#d4a853','#ffb6c1','#c0366a','#000000','#7b2d8b','#4a90d9',
+  '#000000','#ffffff','#ffe0f0','#d4a853','#ffb6c1','#c0366a','#7b2d8b','#4a90d9',
   '#ffd1dc','#f7c59f','#f2d16b','#b8e0d2','#a8c3f2','#cdb4db','#ffc8a2','#e5989b',
   '#6d597a','#355070','#588157','#bc6c25'
 ];
 let editorEmojis  = [];
 let draggingEmoji = null;
+// CAMBIO 1: color por defecto negro en lugar de blanco
 let selectedColor = '#000000';
 let editorImg     = null;
 
@@ -1643,13 +1602,11 @@ function renderEditorCanvas() {
   const ctx    = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#000000';
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
 
   const imgPad = 16;
-  const captionArea = 90; // espacio reservado para el pie de foto
-  const imgSize = W - imgPad * 2 - captionArea; // imagen cuadrada que deja espacio abajo
-
+  const imgSize = W - imgPad * 2;
   if (editorImg && editorImg.complete) {
     const sw = editorImg.naturalWidth, sh = editorImg.naturalHeight;
     ctx.save();
@@ -1671,11 +1628,11 @@ function renderEditorCanvas() {
 
   const caption = document.getElementById('editorCaption')?.value?.trim() || '';
   if (caption) {
-    ctx.font = `italic 26px "Lora", serif`;
+    ctx.font = `italic 27px "Lora", serif`;
     ctx.fillStyle = selectedColor;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const ty = imgPad + imgSize + captionArea / 2;
+    const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
     ctx.fillText(caption.length > 28 ? caption.slice(0,28)+'…' : caption, W/2, ty);
   }
 }
@@ -1764,9 +1721,9 @@ function saveFromEditor() {
   const ctx = editorCanvas.getContext('2d');
   const W = editorCanvas.width, H = editorCanvas.height;
   ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = '#000000';
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, W, H);
-  const imgPad = 16, captionArea = 90, imgSize = W - imgPad * 2 - captionArea;
+  const imgPad = 16, imgSize = W - imgPad * 2;
   if (editorImg && editorImg.complete) {
     ctx.save();
     ctx.beginPath(); ctx.rect(imgPad, imgPad, imgSize, imgSize); ctx.clip();
@@ -1781,10 +1738,10 @@ function saveFromEditor() {
     ctx.fillText(em.emoji, em.x, em.y);
   });
   if (caption) {
-    ctx.font = `italic 26px "Lora", serif`;
+    ctx.font = `italic 27px "Lora", serif`;
     ctx.fillStyle = selectedColor;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const ty = imgPad + imgSize + captionArea / 2;
+    const ty = imgPad + imgSize + (H - imgPad - imgSize) / 2;
     ctx.fillText(caption.length > 28 ? caption.slice(0, 28) + '…' : caption, W / 2, ty);
   }
 
