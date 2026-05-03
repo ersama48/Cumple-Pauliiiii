@@ -106,6 +106,27 @@ body::before {
 }
 .greeting-sub { font-size: 0.78rem; color: var(--rose-light); letter-spacing: 4px; text-transform: uppercase; font-style: italic; }
 
+/* ---- PAULI unlock hint ---- */
+.pauli-hint {
+  font-size: 0.72rem; color: var(--text-soft);
+  font-style: italic; text-align: center;
+  margin-top: 4px; letter-spacing: 1px;
+  opacity: 0.6;
+}
+.pauli-word {
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Pauli tap ripple */
+@keyframes pauliFlash {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); color: var(--gold); }
+  100% { transform: scale(1); }
+}
+.pauli-tap { animation: pauliFlash 0.4s ease; display: inline-block; }
+
 .carousel {
   width: 100%; max-width: 400px;
   position: relative; margin: 22px 0;
@@ -374,14 +395,21 @@ body::before {
   font-family: 'Lora', serif; font-size: 0.82rem;
   cursor: pointer; text-align: center; transition: all 0.2s;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  position: relative;
+  position: relative; overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 .img-source-btn:active, .img-source-btn.selected {
   border-color: var(--gold);
   background: rgba(212,168,83,0.1);
 }
 .img-source-btn .src-icon { font-size: 1.8rem; }
-.img-source-btn input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+/* Hidden file input overlay */
+.img-source-btn input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer;
+  font-size: 100px; /* force large hit area */
+  width: 100%; height: 100%;
+}
 
 /* Vista previa de imagen seleccionada */
 .preview-container {
@@ -424,6 +452,20 @@ body::before {
   font-size: 0.88rem; font-family: 'Lora', serif;
   font-style: italic; text-align: center;
 }
+/* Error message inside camera overlay */
+.camera-error {
+  color: var(--rose-light);
+  font-size: 0.85rem;
+  font-family: 'Lora', serif;
+  font-style: italic;
+  text-align: center;
+  background: rgba(192,54,106,0.15);
+  border: 1px solid var(--border-rose);
+  border-radius: 12px;
+  padding: 12px 18px;
+  max-width: 320px;
+  display: none;
+}
 .camera-shutter {
   width: 70px; height: 70px; border-radius: 50%;
   background: #fff; border: 4px solid rgba(255,255,255,0.3);
@@ -438,6 +480,13 @@ body::before {
   color: rgba(255,255,255,0.7); padding: 10px 24px;
   border-radius: 10px; font-family: 'Lora', serif;
   font-size: 0.85rem; cursor: pointer;
+}
+
+/* Switch camera button */
+.camera-switch-btn {
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+  color: #fff; padding: 8px 16px; border-radius: 10px;
+  font-family: 'Lora', serif; font-size: 0.8rem; cursor: pointer;
 }
 
 /* Editor de polaroid */
@@ -607,11 +656,32 @@ body::before {
 }
 .btn-back:active { background: rgba(255,255,255,0.06); }
 
+/* Secret unlock toast */
+#unlockToast {
+  position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+  color: #fff; padding: 12px 24px; border-radius: 50px;
+  font-family: 'Lora', serif; font-size: 0.88rem; font-style: italic;
+  box-shadow: 0 4px 24px rgba(192,54,106,0.6);
+  z-index: 8500; opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none; white-space: nowrap;
+}
+#unlockToast.show {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+
 #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 8000; }
 .hidden { display: none !important; }
 .info-text { font-size: 0.82rem; color: var(--text-soft); text-align: center; font-style: italic; margin: 6px 0; }
 .attempts-line { text-align: center; color: var(--text-soft); font-size: 0.84rem; margin-bottom: 10px; }
 .attempts-line span { color: var(--rose-light); font-weight: 600; }
+
+/* ---- Responsive tweaks ---- */
+@media (max-width: 380px) {
+  .polaroid-card { width: 138px; }
+  .carousel { max-width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -624,18 +694,25 @@ body::before {
 
 <button id="musicBtn" onclick="activateMusic()">🎵 Activar música</button>
 
+<!-- Unlock toast -->
+<div id="unlockToast">🔒 Toca "Pauli" 3 veces para desbloquear la carta…</div>
+
 <!-- VIDEO MODAL -->
 <div id="videoModal">
   <video id="modalVideo" playsinline webkit-playsinline></video>
   <div id="videoTimerWrap">Continúa en <span id="timerCount">5</span>s…</div>
 </div>
 
-<!-- CÁMARA OVERLAY (solo foto) -->
+<!-- CÁMARA OVERLAY -->
 <div class="camera-overlay" id="cameraOverlay">
   <video id="cameraVideo" autoplay playsinline muted></video>
+  <div id="cameraError" class="camera-error">
+    ⚠️ No se pudo acceder a la cámara.<br>Comprueba los permisos del navegador o usa "Galería" para subir una foto.
+  </div>
   <div class="camera-ui">
     <div class="camera-hint">Toca el botón para hacer la foto 📸</div>
     <button class="camera-shutter" id="cameraShutter" onclick="capturePhoto()">📷</button>
+    <button class="camera-switch-btn" onclick="switchCamera()">🔄 Cambiar cámara</button>
     <button class="camera-cancel-btn" onclick="closeCamera()">Cancelar</button>
   </div>
 </div>
@@ -667,8 +744,10 @@ body::before {
   </div>
 </div>
 
-<!-- PANTALLA 0 -->
-<div id="screen-greeting" class="screen active">
+<!-- ================================================
+     PANTALLA 0 — ÁLBUM PRINCIPAL (primera pantalla)
+     ================================================ -->
+<div id="screen-greeting" class="screen">
   <div class="greeting-top">
     <h1 class="greeting-title">Feliz Cumpleaños mi amor ❤️</h1>
     <p class="greeting-sub">♥ &nbsp; Para ti, con todo mi amor &nbsp; ♥</p>
@@ -710,19 +789,25 @@ body::before {
 
   <div class="divider"></div>
 
-  <div class="love-letter">
-    <div class="letter-head">Mi amor,</div>
-    <div class="letter-body">
-      <p>Hoy es un día muy especial… porque llegaste tú al mundo, y el mundo — y yo — somos mucho mejores gracias a eso. 🌸</p>
-      <p>Cada momento contigo es un regalo que no me merezco, pero que cuido con todo mi corazón. Eres mi favorita, mi cómplice, mi hogar.</p>
-      <p>Antes de llegar a tu sorpresa, te propongo un pequeño viaje por nuestros recuerdos. Espero que te haga sonreír tanto como me haces sonreír tú a mí cada día.</p>
-      <p>Te quiero más de lo que las palabras saben decir. ❤️</p>
+  <!-- Carta oculta — solo visible tras 3 taps en "Pauli" -->
+  <div id="secretLetter" style="display:none; width:100%; max-width:400px;">
+    <div class="love-letter">
+      <div class="letter-head">Mi amor,</div>
+      <div class="letter-body">
+        <p>Hoy es un día muy especial… porque llegaste tú al mundo, y el mundo — y yo — somos mucho mejores gracias a eso. 🌸</p>
+        <p>Cada momento contigo es un regalo que no me merezco, pero que cuido con todo mi corazón. Eres mi favorita, mi cómplice, mi hogar.</p>
+        <p>Antes de llegar a tu sorpresa, te propongo un pequeño viaje por nuestros recuerdos. Espero que te haga sonreír tanto como me haces sonreír tú a mí cada día.</p>
+        <p>Te quiero más de lo que las palabras saben decir. ❤️</p>
+      </div>
+      <div class="letter-sign">— Con todo mi amor 💋</div>
     </div>
-    <div class="letter-sign">— Con todo mi amor 💋</div>
+
+    <button class="btn-main" onclick="startGames()" style="margin-top:18px">🎉 &nbsp; Empezar la sorpresa &nbsp; →</button>
   </div>
 
-  <button class="btn-main" onclick="startGames()">🎉 &nbsp; Empezar la sorpresa &nbsp; →</button>
-  <button class="btn-gold" onclick="showScreen('screen-polaroid'); initPolaroid();">📸 &nbsp; Álbum de recuerdos &nbsp; ✨</button>
+  <div class="divider"></div>
+
+  <button class="btn-gold" id="greetingAlbumBtn" style="display:none" onclick="showScreen('screen-polaroid'); initPolaroid(); document.getElementById('polaroidBackBtn').style.display='flex';">📸 &nbsp; Álbum de recuerdos &nbsp; ✨</button>
 </div>
 
 <!-- JUEGO 1 -->
@@ -800,31 +885,38 @@ body::before {
 </div>
 
 <!-- PANTALLA POLAROID -->
-<div id="screen-polaroid" class="screen">
-  <button class="btn-back" onclick="polaroidGoBack()">← Volver</button>
+<div id="screen-polaroid" class="screen active">
+  <button class="btn-back" id="polaroidBackBtn" style="display:none" onclick="polaroidGoBack()">← Volver</button>
 
   <div class="polaroid-header">
     <h2 class="polaroid-header-title">Álbum de recuerdos</h2>
-    <p class="polaroid-header-sub">📸 &nbsp; Momentos con Pauli &nbsp; 📸</p>
+    <p class="polaroid-header-sub">📸 &nbsp; Momentos con <span class="pauli-word" id="pauliWord">Pauli</span> &nbsp; 📸</p>
   </div>
 
   <div class="polaroid-upload-card">
     <div class="polaroid-upload-title">✨ Añadir una polaroid</div>
 
-    <!-- Selector de fuente — solo imagen -->
+    <!-- Selector de fuente -->
     <div class="img-source-selector">
+      <!-- Galería: input file real dentro del botón -->
       <div class="img-source-btn" id="galleryBtn">
         <span class="src-icon">🖼️</span>
-        <span>Galería</span>
-        <input type="file" accept="image/*" onchange="onGallerySelect(event)">
+        <span>Galería / Archivo</span>
+        <input
+          type="file"
+          id="galleryInput"
+          accept="image/*"
+          onchange="onGallerySelect(event)"
+        >
       </div>
-      <div class="img-source-btn" onclick="openCamera()">
+      <!-- Cámara frontal: abre visor en tiempo real -->
+      <div class="img-source-btn" id="cameraBtn" onclick="openCamera()">
         <span class="src-icon">📸</span>
         <span>Cámara frontal</span>
       </div>
     </div>
 
-    <!-- Vista previa -->
+<!-- Vista previa -->
     <div class="preview-container" id="previewContainer">
       <img id="previewImg" alt="Vista previa">
       <button class="preview-remove" onclick="clearPreview()">✕</button>
@@ -859,7 +951,7 @@ body::before {
       </div>
       <div class="letter-sign">Tuyo siempre ❤️</div>
     </div>
-    <button class="btn-gold" onclick="showScreen('screen-polaroid'); initPolaroid(); polaroidFromFinal = true;" style="margin-top:20px">
+    <button class="btn-gold" onclick="showScreen('screen-polaroid'); initPolaroid(); polaroidFromFinal = true; document.getElementById('polaroidBackBtn').style.display='flex';" style="margin-top:20px">
       📸 &nbsp; Ver álbum de recuerdos &nbsp; ✨
     </button>
     <div style="margin-top:28px;font-size:2rem;animation:pulseBeat 1s infinite">❤️ 🥳 🎂 🫶 ❤️</div>
@@ -881,7 +973,7 @@ const GAME1 = [
 const GAME2 = [
   { q: "¿Cuál es mi color favorito?", opts: ["Azul","Rojo","Verde","Lila"], correct: 3 },
   { q: "¿Cuál es mi bebida favorita?", opts: ["Fuz tea","Nestea","Agua","Coca-Cola"], correct: 0 },
-  { q: "¿Cuál es mi mascota favorita?", opts: ["Lolo","Lola","Pitu","Copito"], correct: any },
+  { q: "¿Cuál es mi mascota favorita?", opts: ["Lolo","Lola","Pitu","Copito"], correct: 0 },
   { q: "¿Qué es lo que más me gusta de ti?", opts: ["Tu sonrisa","Tu forma de ser","Tu mirada","Todo de ti"], correct: 3 },
   { q: "¿Cuál es nuestro lugar especial?", opts: ["Camita de arriba","Camita de abajo","Roslena","Donde tú estés"], correct: 0 },
 ];
@@ -900,6 +992,69 @@ let piecesOnBoard = 0;
 let carIdx = 0, carTimer;
 let polaroidFromFinal = false;
 const TOTAL_SLIDES = 5;
+
+/* =====================================================
+   PAULI SECRET TAP — 3 taps desbloquean la carta
+   ===================================================== */
+let pauliTaps = 0;
+let pauliTimer = null;
+const PAULI_TAPS_NEEDED = 3;
+
+function handlePauliTap(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  pauliTaps++;
+
+  // Animación visual en cada tap
+  const el = document.getElementById('pauliWord');
+  el.classList.remove('pauli-tap');
+  void el.offsetWidth; // reflow
+  el.classList.add('pauli-tap');
+
+  // Mostrar toast con conteo
+  if (pauliTaps < PAULI_TAPS_NEEDED) {
+    showToast(`🔒 ${PAULI_TAPS_NEEDED - pauliTaps} tap${PAULI_TAPS_NEEDED - pauliTaps === 1 ? '' : 's'} más para desbloquear…`);
+  }
+
+  // Reinicia el contador si pasan más de 1.5s sin nuevo tap
+  clearTimeout(pauliTimer);
+  pauliTimer = setTimeout(() => { pauliTaps = 0; }, 1500);
+
+  if (pauliTaps >= PAULI_TAPS_NEEDED) {
+    pauliTaps = 0;
+    clearTimeout(pauliTimer);
+    unlockSecret();
+  }
+}
+
+function unlockSecret() {
+  if (document.getElementById('secretLetter').style.display !== 'none') {
+    // Ya desbloqueado — ir directamente a la pantalla de la carta
+    showScreen('screen-greeting');
+    resetCarTimer();
+    return;
+  }
+  // Primera vez: desbloquear carta y navegar
+  document.getElementById('secretLetter').style.display = 'block';
+  showToast('🔓 ¡Carta desbloqueada! ✨');
+  startConfetti();
+  showScreen('screen-greeting');
+  resetCarTimer();
+}
+
+const pauliEl = document.getElementById('pauliWord');
+pauliEl.addEventListener('click', handlePauliTap);
+pauliEl.addEventListener('touchend', handlePauliTap, { passive: false });
+
+/* Toast helper */
+function showToast(msg) {
+  const t = document.getElementById('unlockToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
 
 /* =====================================================
    HEARTS
@@ -1015,6 +1170,8 @@ function completeGame(idx) {
 function unlockFinal() {
   showScreen('screen-final');
   startConfetti();
+  // Mostrar botón álbum en carta secreta
+  document.getElementById('greetingAlbumBtn').style.display = 'block';
   const fv = document.getElementById('finalVideo');
   if (fv) fv.play().catch(() => {});
 }
@@ -1197,7 +1354,7 @@ function placePiece(piece, slot) {
 }
 
 /* =====================================================
-   POLAROID — ÁLBUM (solo fotos)
+   POLAROID — ÁLBUM
    ===================================================== */
 const POLAROID_KEY = 'bday_polaroids';
 let polaroids = [];
@@ -1225,25 +1382,61 @@ function savePolaroidsToStorage() {
   }
 }
 
-/* --- Galería (solo imágenes) --- */
+/* ---- Galería / File input (funciona en móvil y escritorio) ---- */
 function onGallerySelect(event) {
-  const file = event.target.files[0];
+  const file = event.target.files && event.target.files[0];
   if (!file) return;
+  // Validar que es imagen
+  if (!file.type.startsWith('image/')) {
+    alert('Por favor selecciona una imagen 📷');
+    return;
+  }
   const reader = new FileReader();
   reader.onload = function(e) { setPreviewImage(e.target.result); };
+  reader.onerror = function() { alert('No se pudo leer el archivo. Inténtalo de nuevo.'); };
   reader.readAsDataURL(file);
+  // Reset input value so same file can be reselected
+  event.target.value = '';
 }
 
-/* --- Cámara frontal (solo foto) --- */
+/* ---- Cámara en tiempo real ---- */
 let cameraStream = null;
+let currentFacingMode = 'user'; // frontal por defecto
 
 function openCamera() {
+  // Comprobar compatibilidad
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showCameraError('Tu navegador no admite acceso directo a la cámara. Usa el botón "Tomar foto" de arriba.');
+    return;
+  }
+
   const overlay = document.getElementById('cameraOverlay');
   const video   = document.getElementById('cameraVideo');
+  const errorEl = document.getElementById('cameraError');
+  errorEl.style.display = 'none';
   overlay.classList.add('show');
+  document.getElementById('cameraShutter').style.display = '';
+
+  startCameraStream(currentFacingMode);
+}
+
+function startCameraStream(facingMode) {
+  const video = document.getElementById('cameraVideo');
+  const errorEl = document.getElementById('cameraError');
+
+  // Detener stream anterior
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(t => t.stop());
+    cameraStream = null;
+  }
+  video.srcObject = null;
 
   const constraints = {
-    video: { facingMode: { ideal: 'user' }, width: { ideal: 640 }, height: { ideal: 640 } },
+    video: {
+      facingMode: { ideal: facingMode },
+      width:  { ideal: 1280 },
+      height: { ideal: 720 }
+    },
     audio: false
   };
 
@@ -1251,43 +1444,93 @@ function openCamera() {
     .then(stream => {
       cameraStream = stream;
       video.srcObject = stream;
+      video.style.display = '';
+      errorEl.style.display = 'none';
+      video.play().catch(() => {});
     })
     .catch(err => {
-      console.error(err);
-      overlay.classList.remove('show');
-      alert('No se pudo acceder a la cámara. Revisa los permisos del navegador 📷');
+      console.error('Camera error:', err.name, err.message);
+      let msg = 'No se pudo acceder a la cámara.';
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        msg = '⛔ Permiso de cámara denegado. Ve a los ajustes de tu navegador y permite el acceso.';
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        msg = '📷 No se encontró ninguna cámara en este dispositivo.';
+      } else if (err.name === 'NotReadableError') {
+        msg = '📷 La cámara está siendo usada por otra aplicación.';
+      } else if (err.name === 'OverconstrainedError') {
+        // Intentar sin restricciones de facingMode
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+          .then(stream => {
+            cameraStream = stream;
+            video.srcObject = stream;
+            video.style.display = '';
+            errorEl.style.display = 'none';
+            video.play().catch(() => {});
+          })
+          .catch(() => showCameraError('No se pudo acceder a ninguna cámara disponible.'));
+        return;
+      }
+      showCameraError(msg);
     });
+}
+
+function showCameraError(msg) {
+  const errorEl = document.getElementById('cameraError');
+  const video = document.getElementById('cameraVideo');
+  errorEl.textContent = msg;
+  errorEl.style.display = 'block';
+  video.style.display = 'none';
+  document.getElementById('cameraShutter').style.display = 'none';
+}
+
+function switchCamera() {
+  currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+  startCameraStream(currentFacingMode);
 }
 
 function capturePhoto() {
   const video = document.getElementById('cameraVideo');
-  const OUT = 368;
+  if (!video.videoWidth || !video.videoHeight) {
+    alert('La cámara aún no está lista. Espera un momento.');
+    return;
+  }
+  const OUT = 640;
   const canvas = document.createElement('canvas');
   canvas.width  = OUT;
   canvas.height = OUT;
   const ctx = canvas.getContext('2d');
-  ctx.translate(OUT, 0);
-  ctx.scale(-1, 1);
+
+  // Espejo solo para cámara frontal
+  if (currentFacingMode === 'user') {
+    ctx.translate(OUT, 0);
+    ctx.scale(-1, 1);
+  }
+
   const vw = video.videoWidth, vh = video.videoHeight;
   const side = Math.min(vw, vh);
   const ox = (vw - side) / 2;
   const oy = (vh - side) / 2;
   ctx.drawImage(video, ox, oy, side, side, 0, 0, OUT, OUT);
-  const imgData = canvas.toDataURL('image/jpeg', 0.80);
+
+  const imgData = canvas.toDataURL('image/jpeg', 0.82);
   closeCamera();
   setPreviewImage(imgData);
 }
 
 function closeCamera() {
   if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
-  document.getElementById('cameraVideo').srcObject = null;
+  const video = document.getElementById('cameraVideo');
+  video.srcObject = null;
+  video.style.display = '';
+  document.getElementById('cameraError').style.display = 'none';
+  document.getElementById('cameraShutter').style.display = '';
   document.getElementById('cameraOverlay').classList.remove('show');
 }
 
 function setPreviewImage(base64) {
   const tmpImg = new Image();
   tmpImg.onload = function() {
-    const MAX = 800;
+    const MAX = 1000;
     let w = tmpImg.width, h = tmpImg.height;
     if (w > MAX || h > MAX) {
       const ratio = Math.min(MAX / w, MAX / h);
@@ -1297,28 +1540,33 @@ function setPreviewImage(base64) {
     const rc = document.createElement('canvas');
     rc.width = w; rc.height = h;
     rc.getContext('2d').drawImage(tmpImg, 0, 0, w, h);
-    pendingImageBase64 = rc.toDataURL('image/jpeg', 0.80);
+    pendingImageBase64 = rc.toDataURL('image/jpeg', 0.82);
     const container = document.getElementById('previewContainer');
     const img = document.getElementById('previewImg');
     img.src = pendingImageBase64;
     img.style.display = 'block';
     container.style.display = 'block';
     document.getElementById('editBtn').disabled = false;
+    // Hacer scroll hacia la preview
+    container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
+  tmpImg.onerror = function() { alert('No se pudo cargar la imagen. Prueba con otra.'); };
   tmpImg.src = base64;
 }
 
 function clearPreview() {
   pendingImageBase64 = null;
   document.getElementById('previewContainer').style.display = 'none';
-  document.getElementById('previewImg').src = '';
-  document.getElementById('previewImg').style.display = 'block';
+  const img = document.getElementById('previewImg');
+  img.src = '';
+  img.style.display = 'block';
   document.getElementById('editBtn').disabled = true;
-  const fi = document.querySelector('#screen-polaroid input[type="file"]');
-  if (fi) fi.value = '';
+  // Reset file input
+  const galleryInput = document.getElementById('galleryInput');
+  if (galleryInput) galleryInput.value = '';
 }
 
-/* --- EDITOR --- */
+/* ---- EDITOR ---- */
 const EMOJIS_EDITOR_CATS = [
   { label: '💛 Corazones', emojis: ['❤️','🩷','🧡','💛','💚','🩵','💙','💜','🤎','🖤','🤍','💕','💖','💗','💓','💞','💘','💝','❣️','❤️‍🔥','❤️‍🩹'] },
   { label: '🎉 Celebración', emojis: ['🎉','🎊','🥳','🎂','🍰','🧁','🍾','🥂','🎈','🎁','🎆','🎇','🪩'] },
@@ -1553,7 +1801,7 @@ function saveFromEditor() {
     ctx.fillText(caption.length > 28 ? caption.slice(0, 28) + '…' : caption, W / 2, ty);
   }
 
-  const finalImg = editorCanvas.toDataURL('image/jpeg', 0.75);
+  const finalImg = editorCanvas.toDataURL('image/jpeg', 0.78);
   const pol = { id: Date.now(), image: finalImg, text: caption };
 
   closeEditor();
@@ -1665,7 +1913,7 @@ function shuffle(arr) {
 }
 function disableOpts(id) { document.querySelectorAll(`#${id} .opt-btn`).forEach(b => b.disabled = true); }
 
-window.addEventListener('DOMContentLoaded', () => { tryAutoplay(); resetCarTimer(); });
+window.addEventListener('DOMContentLoaded', () => { tryAutoplay(); resetCarTimer(); initPolaroid(); });
 </script>
 </body>
 </html>
